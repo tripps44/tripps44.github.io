@@ -53,3 +53,7 @@ __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
 *.egg-info/
+.positai
+
+/.quarto/
+**/*.quarto_ipynb

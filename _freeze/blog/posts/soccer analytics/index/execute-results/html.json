@@ -1,0 +1,15 @@
+{
+  "hash": "2616d964e01ba76f3776d3554ba63630",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Exploring Statsbomb Open Data\"\ndescription: \"Exploratory analysis of \"\ndate: \"2026-05-19\"\ncategories: [R, EDA, Soccer, Data, tidyverse]\n\n---\n\n## Overview\n\nComing soon\n\n## Tools Used\n\n- **Language:** R\n- **Packages:** tidyverse, ggplot2, dplyr\n\n## Key Findings\n\nLorem Ipsum\n\n## Code Sample\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\n\n# code\n```\n:::\n\n\n## Links\n\n[View Full Code on GitHub](https://github.com/tripps44/tripps44.github.io)",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,34 @@
+---
+title: "Exploring Statsbomb Open Data"
+description: "Exploratory analysis of "
+date: "2026-05-19"
+categories: [R, EDA, Soccer, Data, tidyverse]
+
+---
+
+## Overview
+
+Coming soon
+
+## Tools Used
+
+- **Language:** R
+- **Packages:** tidyverse, ggplot2, dplyr
+
+## Key Findings
+
+Lorem Ipsum
+
+## Code Sample
+
+```{r}
+#| eval: false
+library(tidyverse)
+
+# code
+
+```
+
+## Links
+
+[View Full Code on GitHub](https://github.com/tripps44/tripps44.github.io)

@@ -1,0 +1,35 @@
+project:
+  type: website
+
+website:
+  title: "Ash Tripathi"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: projects.qmd
+        text: Projects
+      - href: blog/index.qmd
+        text: Blog
+    right:
+      - icon: github
+        href: https://github.com/tripps44
+      - icon: linkedin
+        href: https://linkedin.com/in/ashtripathiboston
+  page-footer:
+    left: "© 2026 Ash Tripathi"
+    right: "Made with [Quarto](https://quarto.org)"
+
+format:
+  html:
+    theme: [cosmo, custom.scss]
+    code-fold: show
+    code-tools: true
+    highlight-style: github
+    toc: true
+
+execute:
+  freeze: auto
+
+
+

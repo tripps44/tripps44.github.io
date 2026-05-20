@@ -1,0 +1,41 @@
+---
+title: "Ash Tripathi"
+image: images/headshot.png
+about:
+  template: trestles
+  image-shape: round
+  image-width: 12em
+  links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/tripps44
+    - icon: linkedin
+      text: LinkedIn
+      href: https://linkedin.com/in/ashtripathiboston
+    - icon: envelope
+      text: Email
+      href: mailto:tripps44@gmail.com
+---
+
+## About Me
+
+Product Manager with 25+ years experience driving Product Strategy, UX, and Agile delivery for Capital Markets, Brokerage, Wealth Management and PaaS / SaaS platforms. 
+
+
+## Skills
+
+**Product, PM & Collaboration** JIRA, Confluence, Aha! Roadmaps, Linear, Miro, Whimsical, Notion, Coda, Figma, Balsamiq, Salesforce
+
+**AI / GenAI Tools & Techniques** Large Language Models (LLMs) via API (OpenAI, Anthropic Claude, Google Gemini, Qwen, DeepSeek, Hugging Face etc.), n8n, Ollama, DataStax Langflow, LM Studio, FLAI (Fidelity Local AI), AutoGen Studio, Opencode, Prompt Engineering, Hybrid Retrieval-Augmented Generation (RAG), Agentic AI workflows, Machine Learning (Supervised/Unsupervised)
+
+**Programming, APIs, Databases & BI: ** Python, R, RStudio, Positron, SQL, NoSQL, ETL, ELT, HTML, CSS, JSON, XML, REST APIs, Postman, Insomnia, Bruno, Docker, MS SQL Server, Oracle, DB2, MySQL, SqlDBM, Redis, MongoDB, DuckDB, ChromaDB, AWS, Datadog, VS Code, Positron, Tableau, Power BI, QlikView, SAP Crystal Reports, KNIME, Snowflake, Pendo, Qualtrics
+
+
+**Trading & Portfolio Management Platforms** Bloomberg Terminal, Bloomberg AIM, BlackRock Aladdin OMS / Aladdin Studio, Charles River IMS (CRIMS), Instinet BlockCross, Fidelity CrossStream, Fidelity High-Income Trading System, Green Pier Brokerage Ops Workstation, State Street Agency Lending, XFI Fixed-Income Trading, Advisor360
+
+## Education
+
+M.Sc. Data Analytics & Computational Social Science - University of Massachusetts Amherst
+
+B.Sc. Finance - Syracuse University
+
