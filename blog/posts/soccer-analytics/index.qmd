@@ -1,6 +1,6 @@
 ---
-title: "Exploring Statsbomb Open Data"
-description: "Exploratory analysis of "
+title: "Lorem Ipsum"
+description: "Lorem Ipsum "
 date: "2026-05-19"
 categories: [R, EDA, Soccer, Data, tidyverse]
 

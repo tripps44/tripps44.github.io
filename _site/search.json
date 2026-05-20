@@ -4,28 +4,21 @@
     "href": "blog/index.html",
     "title": "Blog",
     "section": "",
-    "text": "Exploring Statsbomb Open Data\n\n\n\nR\n\nEDA\n\nSoccer\n\nData\n\ntidyverse\n\n\n\nExploratory analysis of\n\n\n\n\n\nMay 19, 2026\n\n\n\n\n\nNo matching items"
+    "text": "Lorem Ipsum\n\n\n\nR\n\nEDA\n\nSoccer\n\nData\n\ntidyverse\n\n\n\nLorem Ipsum\n\n\n\n\n\nMay 19, 2026\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Ash Tripathi",
     "section": "",
-    "text": "Product Manager with 25+ years experience driving Product Strategy, UX, and Agile delivery for Capital Markets, Brokerage, Wealth Management and PaaS / SaaS platforms."
+    "text": "Product Manager with 25+ years experience driving Product Strategy, Consulting, Analytics, UX and Agile delivery for Fintech, Capital Markets, Brokerage, Wealth Management and PaaS / SaaS platforms. Currently consulting at Fidelity Center for Applied Technology, but open to new consulting or full time opportunities (Greater Boston or Remote)\nHobbies: Sports Analytics (NFL, Soccer), Watching movies, Attending sporting events (Redsox, Spinners, New England Revolution, Patriots)"
   },
   {
     "objectID": "index.html#about-me",
     "href": "index.html#about-me",
     "title": "Ash Tripathi",
     "section": "",
-    "text": "Product Manager with 25+ years experience driving Product Strategy, UX, and Agile delivery for Capital Markets, Brokerage, Wealth Management and PaaS / SaaS platforms."
-  },
-  {
-    "objectID": "index.html#skills",
-    "href": "index.html#skills",
-    "title": "Ash Tripathi",
-    "section": "Skills",
-    "text": "Skills\nProduct, PM & Collaboration JIRA, Confluence, Aha! Roadmaps, Linear, Miro, Whimsical, Notion, Coda, Figma, Balsamiq, Salesforce\nAI / GenAI Tools & Techniques Large Language Models (LLMs) via API (OpenAI, Anthropic Claude, Google Gemini, Qwen, DeepSeek, Hugging Face etc.), n8n, Ollama, DataStax Langflow, LM Studio, FLAI (Fidelity Local AI), AutoGen Studio, Opencode, Prompt Engineering, Hybrid Retrieval-Augmented Generation (RAG), Agentic AI workflows, Machine Learning (Supervised/Unsupervised)\nProgramming, APIs, Databases & BI:  Python, R, RStudio, Positron, SQL, NoSQL, ETL, ELT, HTML, CSS, JSON, XML, REST APIs, Postman, Insomnia, Bruno, Docker, MS SQL Server, Oracle, DB2, MySQL, SqlDBM, Redis, MongoDB, DuckDB, ChromaDB, AWS, Datadog, VS Code, Positron, Tableau, Power BI, QlikView, SAP Crystal Reports, KNIME, Snowflake, Pendo, Qualtrics\nTrading & Portfolio Management Platforms Bloomberg Terminal, Bloomberg AIM, BlackRock Aladdin OMS / Aladdin Studio, Charles River IMS (CRIMS), Instinet BlockCross, Fidelity CrossStream, Fidelity High-Income Trading System, Green Pier Brokerage Ops Workstation, State Street Agency Lending, XFI Fixed-Income Trading, Advisor360"
+    "text": "Product Manager with 25+ years experience driving Product Strategy, Consulting, Analytics, UX and Agile delivery for Fintech, Capital Markets, Brokerage, Wealth Management and PaaS / SaaS platforms. Currently consulting at Fidelity Center for Applied Technology, but open to new consulting or full time opportunities (Greater Boston or Remote)\nHobbies: Sports Analytics (NFL, Soccer), Watching movies, Attending sporting events (Redsox, Spinners, New England Revolution, Patriots)"
   },
   {
     "objectID": "index.html#education",
@@ -44,42 +37,42 @@
   {
     "objectID": "blog/posts/soccer-analytics/index.html",
     "href": "blog/posts/soccer-analytics/index.html",
-    "title": "Exploring Statsbomb Open Data",
+    "title": "Lorem Ipsum",
     "section": "",
     "text": "Coming soon"
   },
   {
     "objectID": "blog/posts/soccer-analytics/index.html#overview",
     "href": "blog/posts/soccer-analytics/index.html#overview",
-    "title": "Exploring Statsbomb Open Data",
+    "title": "Lorem Ipsum",
     "section": "",
     "text": "Coming soon"
   },
   {
     "objectID": "blog/posts/soccer-analytics/index.html#tools-used",
     "href": "blog/posts/soccer-analytics/index.html#tools-used",
-    "title": "Exploring Statsbomb Open Data",
+    "title": "Lorem Ipsum",
     "section": "Tools Used",
     "text": "Tools Used\n\nLanguage: R\nPackages: tidyverse, ggplot2, dplyr"
   },
   {
     "objectID": "blog/posts/soccer-analytics/index.html#key-findings",
     "href": "blog/posts/soccer-analytics/index.html#key-findings",
-    "title": "Exploring Statsbomb Open Data",
+    "title": "Lorem Ipsum",
     "section": "Key Findings",
     "text": "Key Findings\nLorem Ipsum"
   },
   {
     "objectID": "blog/posts/soccer-analytics/index.html#code-sample",
     "href": "blog/posts/soccer-analytics/index.html#code-sample",
-    "title": "Exploring Statsbomb Open Data",
+    "title": "Lorem Ipsum",
     "section": "Code Sample",
     "text": "Code Sample\n\n\nCode\nlibrary(tidyverse)\n\n# code"
   },
   {
     "objectID": "blog/posts/soccer-analytics/index.html#links",
     "href": "blog/posts/soccer-analytics/index.html#links",
-    "title": "Exploring Statsbomb Open Data",
+    "title": "Lorem Ipsum",
     "section": "Links",
     "text": "Links\nView Full Code on GitHub"
   }
