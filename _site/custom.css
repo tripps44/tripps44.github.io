@@ -1,0 +1,42 @@
+/* Navbar background */
+.navbar {
+  background-color: #14213d !important;
+}
+
+/* Navbar brand name */
+.navbar-brand {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em;
+}
+
+/* All navbar links including Home, Projects, Blog */
+.navbar-nav .nav-link {
+  color: #eaeaea !important;
+}
+
+/* Active navbar link */
+.navbar-nav .nav-link.active {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+/* Navbar link hover */
+.navbar-nav .nav-link:hover {
+  color: #0d7377 !important;
+}
+
+/* Body */
+body {
+  background-color: #fafafa !important;
+  color: #1a1a1a !important;
+}
+
+/* Links */
+a {
+  color: #0d7377 !important;
+}
+
+a:hover {
+  color: #095e61 !important;
+  text-decoration: underline;

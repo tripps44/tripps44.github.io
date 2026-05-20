@@ -22,7 +22,8 @@ website:
 
 format:
   html:
-    theme: [cosmo, custom.scss]
+    theme: cosmo
+    css: custom.css
     code-fold: show
     code-tools: true
     highlight-style: github
