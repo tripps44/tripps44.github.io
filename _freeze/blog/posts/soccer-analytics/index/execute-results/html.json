@@ -1,15 +1,12 @@
 {
-  "hash": "0bbdc4ca4b5d5fb21f264a2bb6706840",
+  "hash": "6c5813cdb316140772a132ddb06f2473",
   "result": {
-    "engine": "knitr",
-    "markdown": "---\ntitle: \"Lorem Ipsum\"\ndescription: \"Lorem Ipsum \"\ndate: \"2026-05-19\"\ncategories: [R, EDA, Soccer, Data, tidyverse]\n\n---\n\n## Overview\n\nComing soon\n\n## Tools Used\n\n- **Language:** R\n- **Packages:** tidyverse, ggplot2, dplyr\n\n## Key Findings\n\nLorem Ipsum\n\n## Code Sample\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\n\n# code\n```\n:::\n\n\n## Links\n\n[View Full Code on GitHub](https://github.com/tripps44/tripps44.github.io)",
-    "supporting": [],
-    "filters": [
-      "rmarkdown/pagebreak.lua"
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Exploring Soccer Data for Analysis\"\ndescription: \"Data collection, manipulation and visualization of Soccer data using Python\"\ndate: \"2026-05-19\"\ncategories: [Python, EDA, Soccer, Data, StatsBomb]\nformat:\n  html:\n    code-fold: true\n    code-tools: true\njupyter: python3\n---\n\n## Overview\n\nTools like StatsBomb's open data SDK, mplsoccer, and pandas have made Python the lingua franca for everything from event data wrangling to expected goals\nmodeling. This post walks through setting up a reproducible Python based analytics environment. Since I primarily use R, I am transitioning to using Python\nand this post walks through the analytics workflow. \n\n## Tools Used\n\n- **Language:** Python \n- **IDE:** Rstudio\n- **Packages:** Quarto, pandas, numpy, mplsoccer, statsbombpy, matplotlib, plotly\n\n## Code Sample\n\n```{r}\n#| eval: false\nlibrary(tidyverse)\n\n# code\n\n```\n\n## Links\n\n[View Full Code on GitHub](https://github.com/tripps44/tripps44.github.io)\n\n",
+    "supporting": [
+      "index_files"
     ],
-    "includes": {},
-    "engineDependencies": {},
-    "preserve": {},
-    "postProcess": true
+    "filters": [],
+    "includes": {}
   }
 }

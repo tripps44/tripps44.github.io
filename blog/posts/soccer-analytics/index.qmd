@@ -1,23 +1,26 @@
 ---
-title: "Lorem Ipsum"
-description: "Lorem Ipsum "
+title: "Exploring Soccer Data for Analysis"
+description: "Data collection, manipulation and visualization of Soccer data using Python"
 date: "2026-05-19"
-categories: [R, EDA, Soccer, Data, tidyverse]
-
+categories: [Python, EDA, Soccer, Data, StatsBomb]
+format:
+  html:
+    code-fold: true
+    code-tools: true
+jupyter: python3
 ---
 
 ## Overview
 
-Coming soon
+Tools like StatsBomb's open data SDK, mplsoccer, and pandas have made Python the lingua franca for everything from event data wrangling to expected goals
+modeling. This post walks through setting up a reproducible Python based analytics environment. Since I primarily use R, I am transitioning to using Python
+and this post walks through the analytics workflow. 
 
 ## Tools Used
 
-- **Language:** R
-- **Packages:** tidyverse, ggplot2, dplyr
-
-## Key Findings
-
-Lorem Ipsum
+- **Language:** Python 
+- **IDE:** Rstudio
+- **Packages:** Quarto, pandas, numpy, mplsoccer, statsbombpy, matplotlib, plotly
 
 ## Code Sample
 

@@ -4,7 +4,7 @@
     "href": "blog/index.html",
     "title": "Blog",
     "section": "",
-    "text": "Lorem Ipsum\n\n\n\nR\n\nEDA\n\nSoccer\n\nData\n\ntidyverse\n\n\n\nLorem Ipsum\n\n\n\n\n\nMay 19, 2026\n\n\n\n\n\nNo matching items"
+    "text": "Exploring Soccer Data for Analysis\n\n\n\nPython\n\nEDA\n\nSoccer\n\nData\n\nStatsBomb\n\n\n\nData collection, manipulation and visualization of Soccer data using Python\n\n\n\n\n\nMay 19, 2026\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
@@ -37,23 +37,23 @@
   {
     "objectID": "blog/posts/soccer-analytics/index.html",
     "href": "blog/posts/soccer-analytics/index.html",
-    "title": "Lorem Ipsum",
+    "title": "Exploring Soccer Data for Analysis",
     "section": "",
-    "text": "Coming soon"
+    "text": "Tools like StatsBomb’s open data SDK, mplsoccer, and pandas have made Python the lingua franca for everything from event data wrangling to expected goals modeling. This post walks through setting up a reproducible Python based analytics environment. Since I primarily use R, I am transitioning to using Python and this post walks through the analytics workflow."
   },
   {
     "objectID": "blog/posts/soccer-analytics/index.html#overview",
     "href": "blog/posts/soccer-analytics/index.html#overview",
-    "title": "Lorem Ipsum",
+    "title": "Exploring Soccer Data for Analysis",
     "section": "",
-    "text": "Coming soon"
+    "text": "Tools like StatsBomb’s open data SDK, mplsoccer, and pandas have made Python the lingua franca for everything from event data wrangling to expected goals modeling. This post walks through setting up a reproducible Python based analytics environment. Since I primarily use R, I am transitioning to using Python and this post walks through the analytics workflow."
   },
   {
     "objectID": "blog/posts/soccer-analytics/index.html#tools-used",
     "href": "blog/posts/soccer-analytics/index.html#tools-used",
-    "title": "Lorem Ipsum",
+    "title": "Exploring Soccer Data for Analysis",
     "section": "Tools Used",
-    "text": "Tools Used\n\nLanguage: R\nPackages: tidyverse, ggplot2, dplyr"
+    "text": "Tools Used\n\nLanguage: Python\nIDE: Rstudio\nPackages: Quarto, pandas, numpy, mplsoccer, statsbombpy, matplotlib, plotly"
   },
   {
     "objectID": "blog/posts/soccer-analytics/index.html#key-findings",
@@ -65,14 +65,14 @@
   {
     "objectID": "blog/posts/soccer-analytics/index.html#code-sample",
     "href": "blog/posts/soccer-analytics/index.html#code-sample",
-    "title": "Lorem Ipsum",
+    "title": "Exploring Soccer Data for Analysis",
     "section": "Code Sample",
-    "text": "Code Sample\n\n\nCode\nlibrary(tidyverse)\n\n# code"
+    "text": "Code Sample\n#| eval: false\nlibrary(tidyverse)\n\n# code"
   },
   {
     "objectID": "blog/posts/soccer-analytics/index.html#links",
     "href": "blog/posts/soccer-analytics/index.html#links",
-    "title": "Lorem Ipsum",
+    "title": "Exploring Soccer Data for Analysis",
     "section": "Links",
     "text": "Links\nView Full Code on GitHub"
   }
