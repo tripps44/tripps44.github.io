@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2026-05-19">
-<meta name="description" content="Lorem Ipsum">
+<meta name="description" content="Data collection, manipulation and visualization of Soccer data using Python">
 
-<title>Lorem Ipsum – Ash Tripathi</title>
+<title>Exploring Soccer Data for Analysis – Ash Tripathi</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -171,9 +171,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#tools-used" id="toc-tools-used" class="nav-link" data-scroll-target="#tools-used">Tools Used</a></li>
-  <li><a href="#key-findings" id="toc-key-findings" class="nav-link" data-scroll-target="#key-findings">Key Findings</a></li>
-  <li><a href="#code-sample" id="toc-code-sample" class="nav-link" data-scroll-target="#code-sample">Code Sample</a></li>
-  <li><a href="#links" id="toc-links" class="nav-link" data-scroll-target="#links">Links</a></li>
+  <li><a href="#r-reticulate-to-use-a-specific-environment" id="toc-r-reticulate-to-use-a-specific-environment" class="nav-link" data-scroll-target="#r-reticulate-to-use-a-specific-environment">R Reticulate to use a specific environment</a></li>
+  <li><a href="#python-imports" id="toc-python-imports" class="nav-link" data-scroll-target="#python-imports">Python Imports</a></li>
+  <li><a href="#exploring-all-competitions" id="toc-exploring-all-competitions" class="nav-link" data-scroll-target="#exploring-all-competitions">Exploring All Competitions</a></li>
+  <li><a href="#finding-all-world-cup-entries" id="toc-finding-all-world-cup-entries" class="nav-link" data-scroll-target="#finding-all-world-cup-entries">Finding all World Cup entries</a></li>
+  <li><a href="#isolating-mens-2022-world-cup" id="toc-isolating-mens-2022-world-cup" class="nav-link" data-scroll-target="#isolating-mens-2022-world-cup">Isolating Men’s 2022 World Cup</a></li>
+  <li><a href="#loading-exploring-matches" id="toc-loading-exploring-matches" class="nav-link" data-scroll-target="#loading-exploring-matches">Loading &amp; Exploring Matches</a></li>
+  <li><a href="#inspecting-a-single-match-before-loading-all-events" id="toc-inspecting-a-single-match-before-loading-all-events" class="nav-link" data-scroll-target="#inspecting-a-single-match-before-loading-all-events">Inspecting a single match before loading all events</a></li>
+  <li><a href="#loading-cleaning-the-data" id="toc-loading-cleaning-the-data" class="nav-link" data-scroll-target="#loading-cleaning-the-data">Loading + Cleaning the data</a>
+  <ul class="collapse">
+  <li><a href="#checking-names" id="toc-checking-names" class="nav-link" data-scroll-target="#checking-names">Checking Names</a></li>
+  <li><a href="#adjusting-names" id="toc-adjusting-names" class="nav-link" data-scroll-target="#adjusting-names">Adjusting Names</a></li>
+  <li><a href="#loading-into-duckdb" id="toc-loading-into-duckdb" class="nav-link" data-scroll-target="#loading-into-duckdb">Loading into Duckdb</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -182,19 +192,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Lorem Ipsum</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Exploring Soccer Data for Analysis</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
   <div class="quarto-categories">
-    <div class="quarto-category">R</div>
+    <div class="quarto-category">Python</div>
     <div class="quarto-category">EDA</div>
     <div class="quarto-category">Soccer</div>
     <div class="quarto-category">Data</div>
-    <div class="quarto-category">tidyverse</div>
+    <div class="quarto-category">StatsBomb</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    Lorem Ipsum
+    Data collection, manipulation and visualization of Soccer data using Python
   </div>
 </div>
 
@@ -219,37 +229,849 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>Coming soon</p>
+<p>Tools like StatsBomb’s open data SDK, mplsoccer, and pandas have made Python the lingua franca for everything from event data wrangling to expected goals modeling. This post walks through setting up a reproducible Python based analytics environment. Since I primarily use R, I am transitioning to using Python and this post walks through the analytics workflow.</p>
 </section>
 <section id="tools-used" class="level2">
 <h2 class="anchored" data-anchor-id="tools-used">Tools Used</h2>
 <ul>
-<li><strong>Language:</strong> R</li>
-<li><strong>Packages:</strong> tidyverse, ggplot2, dplyr</li>
+<li><strong>Language:</strong> Python</li>
+<li><strong>IDE:</strong> Rstudio</li>
+<li><strong>Packages:</strong> Quarto, pandas, numpy, mplsoccer, statsbombpy, duckdb, matplotlib, plotly</li>
 </ul>
 </section>
-<section id="key-findings" class="level2">
-<h2 class="anchored" data-anchor-id="key-findings">Key Findings</h2>
-<p>Lorem Ipsum</p>
+<section id="r-reticulate-to-use-a-specific-environment" class="level2">
+<h2 class="anchored" data-anchor-id="r-reticulate-to-use-a-specific-environment">R Reticulate to use a specific environment</h2>
+<p>This R block must come first before any python block in quarto. I found this out the hard way.</p>
+<pre class="{r}"><code>
+library(reticulate)
+use_condaenv("spro", required = TRUE)
+</code></pre>
 </section>
-<section id="code-sample" class="level2">
-<h2 class="anchored" data-anchor-id="code-sample">Code Sample</h2>
-<div class="cell">
-<details open="" class="code-fold">
+<section id="python-imports" class="level2">
+<h2 class="anchored" data-anchor-id="python-imports">Python Imports</h2>
+<div id="imports" class="cell" data-message="false" data-execution_count="1">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># code</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mplsoccer <span class="im">import</span> Sbopen</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppressing StatsBomb credentials warning (free open data)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"SB_USERNAME"</span>] <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"SB_PASSWORD"</span>] <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>parser <span class="op">=</span> Sbopen()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sbopen parser ready ✅"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"pandas    : </span><span class="sc">{</span>pd<span class="sc">.</span>__version__<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"duckdb    : </span><span class="sc">{</span>duckdb<span class="sc">.</span>__version__<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sbopen parser ready ✅
+pandas    : 3.0.3
+duckdb    : 1.5.2</code></pre>
+</div>
 </div>
 </section>
-<section id="links" class="level2">
-<h2 class="anchored" data-anchor-id="links">Links</h2>
+<section id="exploring-all-competitions" class="level2">
+<h2 class="anchored" data-anchor-id="exploring-all-competitions">Exploring All Competitions</h2>
+<div id="eda-competitions" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>competition <span class="op">=</span> parser.competition()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total datasets available : </span><span class="sc">{</span><span class="bu">len</span>(competition)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Unique competitions      : </span><span class="sc">{</span>competition[<span class="st">'competition_name'</span>]<span class="sc">.</span>nunique()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Unique countries         : </span><span class="sc">{</span>competition[<span class="st">'country_name'</span>]<span class="sc">.</span>nunique()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Columns available:"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(competition.columns.tolist())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total datasets available : 75
+Unique competitions      : 21
+Unique countries         : 13
+
+Columns available:
+['competition_id', 'season_id', 'country_name', 'competition_name', 'competition_gender', 'competition_youth', 'competition_international', 'season_name', 'match_updated', 'match_updated_360', 'match_available_360', 'match_available']</code></pre>
+</div>
+</div>
+</section>
+<section id="finding-all-world-cup-entries" class="level2">
+<h2 class="anchored" data-anchor-id="finding-all-world-cup-entries">Finding all World Cup entries</h2>
+<div id="find-world-cups" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>world_cups <span class="op">=</span> competition[</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    competition[<span class="st">"competition_name"</span>].<span class="bu">str</span>.contains(<span class="st">"World Cup"</span>, case<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(world_cups[[<span class="st">"competition_id"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"competition_name"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"season_name"</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"competition_gender"</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"country_name"</span>]].to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> competition_id   competition_name season_name competition_gender  country_name
+           1470 FIFA U20 World Cup        1979               male International
+             43     FIFA World Cup        2022               male International
+             43     FIFA World Cup        2018               male International
+             43     FIFA World Cup        1990               male International
+             43     FIFA World Cup        1986               male International
+             43     FIFA World Cup        1974               male International
+             43     FIFA World Cup        1970               male International
+             43     FIFA World Cup        1962               male International
+             43     FIFA World Cup        1958               male International
+             72  Women's World Cup        2023             female International
+             72  Women's World Cup        2019             female International</code></pre>
+</div>
+</div>
+<p>I’m interested in exploring the 2022 world cup: competition_id = 43 season_name = 2022</p>
+</section>
+<section id="isolating-mens-2022-world-cup" class="level2">
+<h2 class="anchored" data-anchor-id="isolating-mens-2022-world-cup">Isolating Men’s 2022 World Cup</h2>
+<div id="isolate-wc2022" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>wc_2022 <span class="op">=</span> competition[</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    (competition[<span class="st">"competition_id"</span>] <span class="op">==</span> <span class="dv">43</span>) <span class="op">&amp;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    (competition[<span class="st">"season_name"</span>] <span class="op">==</span> <span class="st">"2022"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>COMPETITION_ID <span class="op">=</span> wc_2022[<span class="st">"competition_id"</span>].values[<span class="dv">0</span>]</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>SEASON_ID      <span class="op">=</span> wc_2022[<span class="st">"season_id"</span>].values[<span class="dv">0</span>]</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Competition    : </span><span class="sc">{</span>wc_2022[<span class="st">'competition_name'</span>]<span class="sc">.</span>values[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Season         : </span><span class="sc">{</span>wc_2022[<span class="st">'season_name'</span>]<span class="sc">.</span>values[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Competition ID : </span><span class="sc">{</span>COMPETITION_ID<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Season ID      : </span><span class="sc">{</span>SEASON_ID<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Competition    : FIFA World Cup
+Season         : 2022
+Competition ID : 43
+Season ID      : 106</code></pre>
+</div>
+</div>
+</section>
+<section id="loading-exploring-matches" class="level2">
+<h2 class="anchored" data-anchor-id="loading-exploring-matches">Loading &amp; Exploring Matches</h2>
+<div id="load-matches" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>matches <span class="op">=</span> parser.match(competition_id<span class="op">=</span>COMPETITION_ID, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                       season_id<span class="op">=</span>SEASON_ID)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total matches : </span><span class="sc">{</span><span class="bu">len</span>(matches)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Tournament stages:"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(matches[<span class="st">"competition_stage_name"</span>].value_counts())</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Columns available:"</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(matches.columns.tolist())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total matches : 64
+
+Tournament stages:
+competition_stage_name
+Group Stage        48
+Round of 16         8
+Quarter-finals      4
+Semi-finals         2
+Final               1
+3rd Place Final     1
+Name: count, dtype: int64
+
+Columns available:
+['match_id', 'match_date', 'kick_off', 'home_score', 'away_score', 'match_status', 'match_status_360', 'last_updated', 'last_updated_360', 'match_week', 'competition_id', 'country_name', 'competition_name', 'season_id', 'season_name', 'home_team_id', 'home_team_name', 'home_team_gender', 'home_team_group', 'home_team_country_id', 'home_team_country_name', 'home_team_managers_id', 'home_team_managers_name', 'home_team_managers_nickname', 'home_team_managers_dob', 'home_team_managers_country_id', 'home_team_managers_country_name', 'away_team_id', 'away_team_name', 'away_team_gender', 'away_team_group', 'away_team_country_id', 'away_team_country_name', 'away_team_managers_id', 'away_team_managers_name', 'away_team_managers_nickname', 'away_team_managers_dob', 'away_team_managers_country_id', 'away_team_managers_country_name', 'metadata_data_version', 'metadata_shot_fidelity_version', 'metadata_xy_fidelity_version', 'competition_stage_id', 'competition_stage_name', 'stadium_id', 'stadium_name', 'stadium_country_id', 'stadium_country_name', 'referee_id', 'referee_name', 'referee_country_id', 'referee_country_name']</code></pre>
+</div>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column Group</th>
+<th>Columns</th>
+<th>Useful For</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Match info</td>
+<td><code>match_date</code>, <code>kick_off</code>, <code>match_week</code></td>
+<td>Timeline analysis</td>
+</tr>
+<tr class="even">
+<td>Scores</td>
+<td><code>home_score</code>, <code>away_score</code></td>
+<td>Results filtering</td>
+</tr>
+<tr class="odd">
+<td>Stadium</td>
+<td><code>stadium_name</code>, <code>stadium_country_name</code></td>
+<td>Venue analysis</td>
+</tr>
+<tr class="even">
+<td>Manager</td>
+<td><code>home_team_managers_name</code></td>
+<td>Tactical analysis</td>
+</tr>
+<tr class="odd">
+<td>Referee</td>
+<td><code>referee_name</code>, <code>referee_country_name</code></td>
+<td>Bias analysis</td>
+</tr>
+<tr class="even">
+<td>Stage</td>
+<td><code>competition_stage_name</code></td>
+<td>Knockout vs group</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="inspecting-a-single-match-before-loading-all-events" class="level2">
+<h2 class="anchored" data-anchor-id="inspecting-a-single-match-before-loading-all-events">Inspecting a single match before loading all events</h2>
+<div id="single-match-explore" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>match_id <span class="op">=</span> matches[<span class="st">"match_id"</span>].iloc[<span class="dv">0</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>home     <span class="op">=</span> matches[<span class="st">"home_team_name"</span>].iloc[<span class="dv">0</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>away     <span class="op">=</span> matches[<span class="st">"away_team_name"</span>].iloc[<span class="dv">0</span>]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>df_event, df_related, df_freeze, df_tactics <span class="op">=</span> parser.event(match_id)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Match         : </span><span class="sc">{</span>home<span class="sc">}</span><span class="ss"> vs </span><span class="sc">{</span>away<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total events  : </span><span class="sc">{</span><span class="bu">len</span>(df_event)<span class="sc">:,}</span><span class="ss">"</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Event type breakdown:"</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_event[<span class="st">"type_name"</span>].value_counts().head(<span class="dv">15</span>))</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Columns available:"</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_event.columns.tolist())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Match         : Serbia vs Switzerland
+Total events  : 3,211
+
+Event type breakdown:
+type_name
+Pass              966
+Ball Receipt      907
+Carry             667
+Pressure          177
+Ball Recovery      92
+Duel               68
+Block              40
+Clearance          36
+Foul Committed     35
+Foul Won           34
+Goal Keeper        30
+Shot               26
+Miscontrol         25
+Interception       23
+Dispossessed       23
+Name: count, dtype: int64
+
+Columns available:
+['id', 'index', 'period', 'timestamp', 'minute', 'second', 'possession', 'duration', 'match_id', 'type_id', 'type_name', 'possession_team_id', 'possession_team_name', 'play_pattern_id', 'play_pattern_name', 'team_id', 'team_name', 'tactics_formation', 'player_id', 'player_name', 'position_id', 'position_name', 'pass_recipient_id', 'pass_recipient_name', 'pass_length', 'pass_angle', 'pass_height_id', 'pass_height_name', 'end_x', 'end_y', 'body_part_id', 'body_part_name', 'sub_type_id', 'sub_type_name', 'x', 'y', 'pass_cross', 'outcome_id', 'outcome_name', 'under_pressure', 'shot_statsbomb_xg', 'technique_id', 'technique_name', 'shot_first_time', 'goalkeeper_position_id', 'goalkeeper_position_name', 'pass_assisted_shot_id', 'pass_shot_assist', 'end_z', 'shot_key_pass_id', 'off_camera', 'pass_deflected', 'counterpress', 'aerial_won', 'pass_switch', 'out', 'foul_won_defensive', 'shot_one_on_one', 'pass_cut_back', 'block_offensive', 'foul_committed_card_id', 'foul_committed_card_name', 'pass_goal_assist', 'shot_deflected', 'block_deflection', 'foul_committed_advantage', 'foul_won_advantage', 'pass_miscommunication', 'ball_recovery_recovery_failure', 'dribble_nutmeg', 'shot_open_goal', 'substitution_replacement_id', 'substitution_replacement_name', 'injury_stoppage_in_chain', 'bad_behaviour_card_id', 'bad_behaviour_card_name']</code></pre>
+</div>
+</div>
+</section>
+<section id="loading-cleaning-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="loading-cleaning-the-data">Loading + Cleaning the data</h2>
+<section id="checking-names" class="level3">
+<h3 class="anchored" data-anchor-id="checking-names">Checking Names</h3>
+<p>In my UMass Amherst Sports Analytics class, for analyzing Argentina’s matches, I had to adjust Messi’s name as full names were jumbling up the plots e.g.&nbsp;Lionel Andrés Messi Cuccittini. Here I will check all the 64 matches for long names</p>
+<div id="all-long-names" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>long_names <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, row <span class="kw">in</span> matches.iterrows():</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    df_event, _, _, _ <span class="op">=</span> parser.event(row[<span class="st">"match_id"</span>])</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> col <span class="kw">in</span> [<span class="st">"player_name"</span>, <span class="st">"pass_recipient_name"</span>]:</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        names <span class="op">=</span> df_event[col].dropna()</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        names <span class="op">=</span> names[names.<span class="bu">str</span>.split().<span class="bu">str</span>.<span class="bu">len</span>() <span class="op">&gt;</span> <span class="dv">3</span>].unique()</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        long_names.update(names)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total long names found: </span><span class="sc">{</span><span class="bu">len</span>(long_names)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Full list:"</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> <span class="bu">sorted</span>(long_names):</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total long names found: 140
+
+Full list:
+  Abdelkarim Hassan Al Haj Fadlalla
+  Abdulaziz Hatem Mohammed Abdullah
+  Abdulelah Saad Hameed Al-Malki
+  Ahmed Alaa Eldin Abdelmotaal
+  Alan Steven Franco Palma
+  Alex Sandro Lobo Silva
+  Ali Assadalla Thaimn Qambar
+  Almoez Ali Zainalabiddin Abdulla
+  Alvaro José Zamora Mata
+  André Miguel Valente Silva
+  Angelo Smit Preciado Quiñónez
+  Anthony Daniel Contreras Enríquez
+  Antony Matheus dos Santos
+  António João Pereira Albuquerque Tavares Silva
+  Assim Omer Al Haj Madibo
+  Bassam Hisham Al Rawi
+  Bernardo Mota Veiga de Carvalho e Silva
+  Bruno Guimarães Rodriguez Moura
+  Bruno Miguel Borges Fernandes
+  Carlos Alberto Rodríguez Gómez
+  Carlos Armando Gruezo Arboleda
+  Carlos Manuel Martínez Castro
+  Carlos Uriel Antuna Romero
+  Cheikh Ahmadou Bamba Mbacke Dieng
+  Cristiano Ronaldo dos Santos Aveiro
+  César Jasib Montes Castro
+  Daniel Alonso Chacón Salas
+  Daniel Alves da Silva
+  Danilo Luiz da Silva
+  Danilo Luís Hélio Pereira
+  Darwin Gabriel Núñez Ribeiro
+  Denis Lemi Zakaria Lako Lado
+  Devis Rogers Epassy Mboka
+  Diego Nicolás De La Cruz Arcosa
+  Diego Roberto Godín Leal
+  Djorkaeff Neicer Reasco González
+  Dylan Daniel Mahmoud Bronn
+  Ederson Santana de Moraes
+  Edinson Roberto Cavani Gómez
+  Edson Omar Álvarez Velázquez
+  Enner Remberto Valencia Lastra
+  Ernesto Alexis Vega Rojas
+  Federico Santiago Valverde Dipetta
+  Felix Eduardo Torres Caicedo
+  Firas Tariq Nasser Al Albirakan
+  Francisco Guillermo Ochoa Magaña
+  Francisco Javier Calvo Quesada
+  Gabriel Fernando de Jesus
+  Gabriel Teodoro Martinelli Silva
+  Giorgian Daniel De Arrascaeta Benedetti
+  Gleison Bremer Silva Nascimento
+  Gonzalo Jordy Plata Jiménez
+  Hassan Khalid Al Heidos
+  Henry Josué Martín Mex
+  Hirving Rodrigo Lozano Bahena
+  Héctor Alfredo Moreno Herrera
+  Héctor Miguel Herrera López
+  Jackson Gabriel Porozo Vernaza
+  Jeremy Leonel Sarmiento Morante
+  Jesús Daniel Gallardo Vasconcelos
+  Jhegson Sebastián Méndez Carabalí
+  Joel Nathaniel Campbell Samuels
+  Johan Alberto Venegas Ulloa
+  Jorge Eduardo Sánchez Ramos
+  José Adoni Cifuentes Charcopa
+  José Andrés Guardado Hernández
+  José Diogo Dalot Teixeira
+  José Martín Cáceres Silva
+  José María Giménez de Vargas
+  João Maria Lobo Alves Palhinha Gonçalves
+  João Mário Naval da Costa Eduardo
+  João Pedro Cavaco Cancelo
+  Juan Pablo Vargas Campos
+  Jurriën David Norman Timber
+  Karl Brillant Toko Ekambi
+  Kendall Jamaal Waston Manley
+  Kevin José Rodríguez Cortez
+  Kevin Nahin Álvarez Campos
+  Kieffer Roberto Francisco Moore
+  Kléper Laveran Lima Ferreira
+  Lionel Andrés Messi Cuccittini
+  Lucas Tolentino Coelho de Lima
+  Luis Alberto Suárez Díaz
+  Luis Gerardo Chávez Magallón
+  Martin Hongla Yma II
+  Matías Nicolás Viña Susperreguy
+  Michael Steveen Estrada Martínez
+  Mohamed Ali Ben Romdhane
+  Mohammad Hossein Kanani Zadegan
+  Mohammed Khalil Al Owais
+  Mohammed Waed Abdulwahhab Al Bayati
+  Moisés Isaac Caicedo Corozo
+  Nawaf Shaker Al Abid
+  Neymar da Silva Santos Junior
+  Ngoran Suiru Fai Collins
+  Nicolas Alexis Julio N'Koulou Ndoubena
+  Néstor Alejandro Araújo Razo
+  Otávio Edmilson da Silva Monteiro
+  Pablo Martín Páez Gavira
+  Paulo Bruno Exequiel Dybala
+  Pedro Guilherme Abreu dos Santos
+  Pervis Josué Estupiñán Tenorio
+  Piero Martín Hincapié Reyna
+  Rafael Alexandre Conceição Leão
+  Raphaël Adelino José Guerreiro
+  Raúl Alonso Jiménez Rodríguez
+  Ricardo Iván Rodríguez Araya
+  Ricardo Jorge Luz Horta
+  Roan Roberto Wilson Gordon
+  Roberto Carlos Alvarado Hernández
+  Rodrigo Javier De Paul
+  Rodrygo Silva de Goes
+  Rogelio Gabriel Funes Mori
+  Romario Andrés Ibarra Mina
+  Ronald Alberto Matarrita Ulate
+  Rúben Diogo Da Silva Neves
+  Rúben Santos Gato Alves Dias
+  Saad Abdullah Al Sheeb
+  Saleh Khalid Al Shehri
+  Salem Mohammed Al Dawsari
+  Salman Mohammed Al Faraj
+  Sami Khalil Al Naji
+  Samuel Yves Oum Gwet
+  Saud Abdullah Abdul Hamid
+  Sergio Busquets i Burgos
+  Steven de Sousa Vitoria
+  Sultan Abdullah Salim Al Ghannam
+  Theo Bernard François Hernández
+  Thiago Emiliano da Silva
+  Vinícius José Paixão de Oliveira Júnior
+  Weverton Pereira da Silva
+  William Silva de Carvalho
+  Yasir Gharsan Al Shahrani
+  Yeltsin Ignacio Tejeda Valverde
+  Youstin Delfin Salas Gómez
+  Álvaro Borja Morata Martín
+  Ángel Fabián Di María Hernández
+  Érick Gabriel Gutiérrez Galaviz
+  Éverton Augusto de Barros Ribeiro
+  Óscar Esau Duarte Gaitán</code></pre>
+</div>
+</div>
+</section>
+<section id="adjusting-names" class="level3">
+<h3 class="anchored" data-anchor-id="adjusting-names">Adjusting Names</h3>
+<div id="build-name-map" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Auto shortening to First + Last word</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> auto_shorten(name):</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    parts <span class="op">=</span> name.split()</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(parts) <span class="op">&lt;=</span> <span class="dv">3</span>:</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> name</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span>parts[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>parts[<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual overrides for well known players</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># where first + last word isn't their known name</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>manual_overrides <span class="op">=</span> {</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Lionel Andrés Messi Cuccittini"</span>          : <span class="st">"Lionel Messi"</span>,</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cristiano Ronaldo dos Santos Aveiro"</span>      : <span class="st">"Cristiano Ronaldo"</span>,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Neymar da Silva Santos Junior"</span>            : <span class="st">"Neymar"</span>,</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Vinícius José Paixão de Oliveira Júnior"</span>  : <span class="st">"Vinícius Júnior"</span>,</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bernardo Mota Veiga de Carvalho e Silva"</span>  : <span class="st">"Bernardo Silva"</span>,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bruno Miguel Borges Fernandes"</span>            : <span class="st">"Bruno Fernandes"</span>,</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"João Pedro Cavaco Cancelo"</span>                : <span class="st">"João Cancelo"</span>,</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rúben Diogo Da Silva Neves"</span>               : <span class="st">"Rúben Neves"</span>,</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rúben Santos Gato Alves Dias"</span>             : <span class="st">"Rúben Dias"</span>,</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Daniel Alves da Silva"</span>                    : <span class="st">"Daniel Alves"</span>,</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Danilo Luiz da Silva"</span>                     : <span class="st">"Danilo"</span>,</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Gabriel Fernando de Jesus"</span>                : <span class="st">"Gabriel Jesus"</span>,</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Gabriel Teodoro Martinelli Silva"</span>         : <span class="st">"Gabriel Martinelli"</span>,</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rodrygo Silva de Goes"</span>                    : <span class="st">"Rodrygo"</span>,</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Ederson Santana de Moraes"</span>                : <span class="st">"Ederson"</span>,</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Thiago Emiliano da Silva"</span>                 : <span class="st">"Thiago Silva"</span>,</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Gleison Bremer Silva Nascimento"</span>          : <span class="st">"Bremer"</span>,</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Lucas Tolentino Coelho de Lima"</span>           : <span class="st">"Lucas"</span>,</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Otávio Edmilson da Silva Monteiro"</span>        : <span class="st">"Otávio"</span>,</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Kléper Laveran Lima Ferreira"</span>             : <span class="st">"Pepe"</span>,</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Paulo Bruno Exequiel Dybala"</span>              : <span class="st">"Paulo Dybala"</span>,</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Ángel Fabián Di María Hernández"</span>          : <span class="st">"Ángel Di María"</span>,</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Darwin Gabriel Núñez Ribeiro"</span>             : <span class="st">"Darwin Núñez"</span>,</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Luis Alberto Suárez Díaz"</span>                 : <span class="st">"Luis Suárez"</span>,</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Edinson Roberto Cavani Gómez"</span>             : <span class="st">"Edinson Cavani"</span>,</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pablo Martín Páez Gavira"</span>                 : <span class="st">"Gavi"</span>,</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Sergio Busquets i Burgos"</span>                 : <span class="st">"Sergio Busquets"</span>,</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Álvaro Borja Morata Martín"</span>               : <span class="st">"Álvaro Morata"</span>,</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Theo Bernard François Hernández"</span>          : <span class="st">"Theo Hernández"</span>,</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Raphaël Adelino José Guerreiro"</span>           : <span class="st">"Raphaël Guerreiro"</span>,</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rafael Alexandre Conceição Leão"</span>          : <span class="st">"Rafael Leão"</span>,</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Hirving Rodrigo Lozano Bahena"</span>            : <span class="st">"Hirving Lozano"</span>,</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Raúl Alonso Jiménez Rodríguez"</span>            : <span class="st">"Raúl Jiménez"</span>,</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Héctor Alfredo Moreno Herrera"</span>            : <span class="st">"Héctor Moreno"</span>,</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Héctor Miguel Herrera López"</span>              : <span class="st">"Héctor Herrera"</span>,</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"André Miguel Valente Silva"</span>               : <span class="st">"André Silva"</span>,</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="co"># full name map</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>name_map <span class="op">=</span> {}</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> <span class="bu">sorted</span>(long_names):</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> name <span class="kw">in</span> manual_overrides:</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>        name_map[name] <span class="op">=</span> manual_overrides[name]</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>        name_map[name] <span class="op">=</span> auto_shorten(name)</span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a><span class="co"># preview</span></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total names adjusted: </span><span class="sc">{</span><span class="bu">len</span>(name_map)<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> original, cleaned <span class="kw">in</span> <span class="bu">sorted</span>(name_map.items()):</span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>original<span class="sc">:&lt;50}</span><span class="ss"> → </span><span class="sc">{</span>cleaned<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total names adjusted: 140
+
+  Abdelkarim Hassan Al Haj Fadlalla                  → Abdelkarim Fadlalla
+  Abdulaziz Hatem Mohammed Abdullah                  → Abdulaziz Abdullah
+  Abdulelah Saad Hameed Al-Malki                     → Abdulelah Al-Malki
+  Ahmed Alaa Eldin Abdelmotaal                       → Ahmed Abdelmotaal
+  Alan Steven Franco Palma                           → Alan Palma
+  Alex Sandro Lobo Silva                             → Alex Silva
+  Ali Assadalla Thaimn Qambar                        → Ali Qambar
+  Almoez Ali Zainalabiddin Abdulla                   → Almoez Abdulla
+  Alvaro José Zamora Mata                            → Alvaro Mata
+  André Miguel Valente Silva                         → André Silva
+  Angelo Smit Preciado Quiñónez                      → Angelo Quiñónez
+  Anthony Daniel Contreras Enríquez                  → Anthony Enríquez
+  Antony Matheus dos Santos                          → Antony Santos
+  António João Pereira Albuquerque Tavares Silva     → António Silva
+  Assim Omer Al Haj Madibo                           → Assim Madibo
+  Bassam Hisham Al Rawi                              → Bassam Rawi
+  Bernardo Mota Veiga de Carvalho e Silva            → Bernardo Silva
+  Bruno Guimarães Rodriguez Moura                    → Bruno Moura
+  Bruno Miguel Borges Fernandes                      → Bruno Fernandes
+  Carlos Alberto Rodríguez Gómez                     → Carlos Gómez
+  Carlos Armando Gruezo Arboleda                     → Carlos Arboleda
+  Carlos Manuel Martínez Castro                      → Carlos Castro
+  Carlos Uriel Antuna Romero                         → Carlos Romero
+  Cheikh Ahmadou Bamba Mbacke Dieng                  → Cheikh Dieng
+  Cristiano Ronaldo dos Santos Aveiro                → Cristiano Ronaldo
+  César Jasib Montes Castro                          → César Castro
+  Daniel Alonso Chacón Salas                         → Daniel Salas
+  Daniel Alves da Silva                              → Daniel Alves
+  Danilo Luiz da Silva                               → Danilo
+  Danilo Luís Hélio Pereira                          → Danilo Pereira
+  Darwin Gabriel Núñez Ribeiro                       → Darwin Núñez
+  Denis Lemi Zakaria Lako Lado                       → Denis Lado
+  Devis Rogers Epassy Mboka                          → Devis Mboka
+  Diego Nicolás De La Cruz Arcosa                    → Diego Arcosa
+  Diego Roberto Godín Leal                           → Diego Leal
+  Djorkaeff Neicer Reasco González                   → Djorkaeff González
+  Dylan Daniel Mahmoud Bronn                         → Dylan Bronn
+  Ederson Santana de Moraes                          → Ederson
+  Edinson Roberto Cavani Gómez                       → Edinson Cavani
+  Edson Omar Álvarez Velázquez                       → Edson Velázquez
+  Enner Remberto Valencia Lastra                     → Enner Lastra
+  Ernesto Alexis Vega Rojas                          → Ernesto Rojas
+  Federico Santiago Valverde Dipetta                 → Federico Dipetta
+  Felix Eduardo Torres Caicedo                       → Felix Caicedo
+  Firas Tariq Nasser Al Albirakan                    → Firas Albirakan
+  Francisco Guillermo Ochoa Magaña                   → Francisco Magaña
+  Francisco Javier Calvo Quesada                     → Francisco Quesada
+  Gabriel Fernando de Jesus                          → Gabriel Jesus
+  Gabriel Teodoro Martinelli Silva                   → Gabriel Martinelli
+  Giorgian Daniel De Arrascaeta Benedetti            → Giorgian Benedetti
+  Gleison Bremer Silva Nascimento                    → Bremer
+  Gonzalo Jordy Plata Jiménez                        → Gonzalo Jiménez
+  Hassan Khalid Al Heidos                            → Hassan Heidos
+  Henry Josué Martín Mex                             → Henry Mex
+  Hirving Rodrigo Lozano Bahena                      → Hirving Lozano
+  Héctor Alfredo Moreno Herrera                      → Héctor Moreno
+  Héctor Miguel Herrera López                        → Héctor Herrera
+  Jackson Gabriel Porozo Vernaza                     → Jackson Vernaza
+  Jeremy Leonel Sarmiento Morante                    → Jeremy Morante
+  Jesús Daniel Gallardo Vasconcelos                  → Jesús Vasconcelos
+  Jhegson Sebastián Méndez Carabalí                  → Jhegson Carabalí
+  Joel Nathaniel Campbell Samuels                    → Joel Samuels
+  Johan Alberto Venegas Ulloa                        → Johan Ulloa
+  Jorge Eduardo Sánchez Ramos                        → Jorge Ramos
+  José Adoni Cifuentes Charcopa                      → José Charcopa
+  José Andrés Guardado Hernández                     → José Hernández
+  José Diogo Dalot Teixeira                          → José Teixeira
+  José Martín Cáceres Silva                          → José Silva
+  José María Giménez de Vargas                       → José Vargas
+  João Maria Lobo Alves Palhinha Gonçalves           → João Gonçalves
+  João Mário Naval da Costa Eduardo                  → João Eduardo
+  João Pedro Cavaco Cancelo                          → João Cancelo
+  Juan Pablo Vargas Campos                           → Juan Campos
+  Jurriën David Norman Timber                        → Jurriën Timber
+  Karl Brillant Toko Ekambi                          → Karl Ekambi
+  Kendall Jamaal Waston Manley                       → Kendall Manley
+  Kevin José Rodríguez Cortez                        → Kevin Cortez
+  Kevin Nahin Álvarez Campos                         → Kevin Campos
+  Kieffer Roberto Francisco Moore                    → Kieffer Moore
+  Kléper Laveran Lima Ferreira                       → Pepe
+  Lionel Andrés Messi Cuccittini                     → Lionel Messi
+  Lucas Tolentino Coelho de Lima                     → Lucas
+  Luis Alberto Suárez Díaz                           → Luis Suárez
+  Luis Gerardo Chávez Magallón                       → Luis Magallón
+  Martin Hongla Yma II                               → Martin II
+  Matías Nicolás Viña Susperreguy                    → Matías Susperreguy
+  Michael Steveen Estrada Martínez                   → Michael Martínez
+  Mohamed Ali Ben Romdhane                           → Mohamed Romdhane
+  Mohammad Hossein Kanani Zadegan                    → Mohammad Zadegan
+  Mohammed Khalil Al Owais                           → Mohammed Owais
+  Mohammed Waed Abdulwahhab Al Bayati                → Mohammed Bayati
+  Moisés Isaac Caicedo Corozo                        → Moisés Corozo
+  Nawaf Shaker Al Abid                               → Nawaf Abid
+  Neymar da Silva Santos Junior                      → Neymar
+  Ngoran Suiru Fai Collins                           → Ngoran Collins
+  Nicolas Alexis Julio N'Koulou Ndoubena             → Nicolas Ndoubena
+  Néstor Alejandro Araújo Razo                       → Néstor Razo
+  Otávio Edmilson da Silva Monteiro                  → Otávio
+  Pablo Martín Páez Gavira                           → Gavi
+  Paulo Bruno Exequiel Dybala                        → Paulo Dybala
+  Pedro Guilherme Abreu dos Santos                   → Pedro Santos
+  Pervis Josué Estupiñán Tenorio                     → Pervis Tenorio
+  Piero Martín Hincapié Reyna                        → Piero Reyna
+  Rafael Alexandre Conceição Leão                    → Rafael Leão
+  Raphaël Adelino José Guerreiro                     → Raphaël Guerreiro
+  Raúl Alonso Jiménez Rodríguez                      → Raúl Jiménez
+  Ricardo Iván Rodríguez Araya                       → Ricardo Araya
+  Ricardo Jorge Luz Horta                            → Ricardo Horta
+  Roan Roberto Wilson Gordon                         → Roan Gordon
+  Roberto Carlos Alvarado Hernández                  → Roberto Hernández
+  Rodrigo Javier De Paul                             → Rodrigo Paul
+  Rodrygo Silva de Goes                              → Rodrygo
+  Rogelio Gabriel Funes Mori                         → Rogelio Mori
+  Romario Andrés Ibarra Mina                         → Romario Mina
+  Ronald Alberto Matarrita Ulate                     → Ronald Ulate
+  Rúben Diogo Da Silva Neves                         → Rúben Neves
+  Rúben Santos Gato Alves Dias                       → Rúben Dias
+  Saad Abdullah Al Sheeb                             → Saad Sheeb
+  Saleh Khalid Al Shehri                             → Saleh Shehri
+  Salem Mohammed Al Dawsari                          → Salem Dawsari
+  Salman Mohammed Al Faraj                           → Salman Faraj
+  Sami Khalil Al Naji                                → Sami Naji
+  Samuel Yves Oum Gwet                               → Samuel Gwet
+  Saud Abdullah Abdul Hamid                          → Saud Hamid
+  Sergio Busquets i Burgos                           → Sergio Busquets
+  Steven de Sousa Vitoria                            → Steven Vitoria
+  Sultan Abdullah Salim Al Ghannam                   → Sultan Ghannam
+  Theo Bernard François Hernández                    → Theo Hernández
+  Thiago Emiliano da Silva                           → Thiago Silva
+  Vinícius José Paixão de Oliveira Júnior            → Vinícius Júnior
+  Weverton Pereira da Silva                          → Weverton Silva
+  William Silva de Carvalho                          → William Carvalho
+  Yasir Gharsan Al Shahrani                          → Yasir Shahrani
+  Yeltsin Ignacio Tejeda Valverde                    → Yeltsin Valverde
+  Youstin Delfin Salas Gómez                         → Youstin Gómez
+  Álvaro Borja Morata Martín                         → Álvaro Morata
+  Ángel Fabián Di María Hernández                    → Ángel Di María
+  Érick Gabriel Gutiérrez Galaviz                    → Érick Galaviz
+  Éverton Augusto de Barros Ribeiro                  → Éverton Ribeiro
+  Óscar Esau Duarte Gaitán                           → Óscar Gaitán</code></pre>
+</div>
+</div>
+<div id="name-override-fixes" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>additional_overrides <span class="op">=</span> {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Alex Sandro Lobo Silva"</span>                    : <span class="st">"Alex Sandro"</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Antony Matheus dos Santos"</span>                 : <span class="st">"Antony"</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bruno Guimarães Rodriguez Moura"</span>           : <span class="st">"Bruno Guimarães"</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"César Jasib Montes Castro"</span>                 : <span class="st">"César Montes"</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Diego Roberto Godín Leal"</span>                  : <span class="st">"Diego Godín"</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Edson Omar Álvarez Velázquez"</span>              : <span class="st">"Edson Álvarez"</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Enner Remberto Valencia Lastra"</span>            : <span class="st">"Enner Valencia"</span>,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Federico Santiago Valverde Dipetta"</span>        : <span class="st">"Fede Valverde"</span>,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Giorgian Daniel De Arrascaeta Benedetti"</span>   : <span class="st">"De Arrascaeta"</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"José Andrés Guardado Hernández"</span>            : <span class="st">"Andrés Guardado"</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"José Diogo Dalot Teixeira"</span>                 : <span class="st">"Diogo Dalot"</span>,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"José María Giménez de Vargas"</span>              : <span class="st">"José Giménez"</span>,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"João Maria Lobo Alves Palhinha Gonçalves"</span>  : <span class="st">"João Palhinha"</span>,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"João Mário Naval da Costa Eduardo"</span>         : <span class="st">"João Mário"</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Martin Hongla Yma II"</span>                      : <span class="st">"Martin Hongla"</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Matías Nicolás Viña Susperreguy"</span>           : <span class="st">"Matías Viña"</span>,</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pedro Guilherme Abreu dos Santos"</span>          : <span class="st">"Pedro"</span>,</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pervis Josué Estupiñán Tenorio"</span>            : <span class="st">"Pervis Estupiñán"</span>,</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Piero Martín Hincapié Reyna"</span>               : <span class="st">"Piero Hincapié"</span>,</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rodrigo Javier De Paul"</span>                    : <span class="st">"Rodrigo De Paul"</span>,</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rogelio Gabriel Funes Mori"</span>                : <span class="st">"Funes Mori"</span>,</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Weverton Pereira da Silva"</span>                 : <span class="st">"Weverton"</span>,</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="co"># merging into main manual_overrides</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>manual_overrides.update(additional_overrides)</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="co"># rebuilding name map</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>name_map <span class="op">=</span> {}</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> <span class="bu">sorted</span>(long_names):</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> name <span class="kw">in</span> manual_overrides:</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>        name_map[name] <span class="op">=</span> manual_overrides[name]</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>        name_map[name] <span class="op">=</span> auto_shorten(name)</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a><span class="co"># spot check</span></span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Spot checking fixes:"</span>)</span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>spot_check <span class="op">=</span> [</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Federico Santiago Valverde Dipetta"</span>,</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bruno Guimarães Rodriguez Moura"</span>,</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rodrigo Javier De Paul"</span>,</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Antony Matheus dos Santos"</span>,</span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Martin Hongla Yma II"</span></span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> spot_check:</span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>name<span class="sc">:&lt;45}</span><span class="ss"> → </span><span class="sc">{</span>name_map[name]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Spot checking fixes:
+  Federico Santiago Valverde Dipetta            → Fede Valverde
+  Bruno Guimarães Rodriguez Moura               → Bruno Guimarães
+  Rodrigo Javier De Paul                        → Rodrigo De Paul
+  Antony Matheus dos Santos                     → Antony
+  Martin Hongla Yma II                          → Martin Hongla</code></pre>
+</div>
+</div>
+</section>
+<section id="loading-into-duckdb" class="level3">
+<h3 class="anchored" data-anchor-id="loading-into-duckdb">Loading into Duckdb</h3>
+<div id="load-to-duckdb" class="cell" data-message="false" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Helper functions ---</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> safe_select(df, columns):</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df[[col <span class="cf">for</span> col <span class="kw">in</span> columns <span class="cf">if</span> col <span class="kw">in</span> df.columns]]</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clean_names(df):</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> col <span class="kw">in</span> [<span class="st">"player_name"</span>, <span class="st">"pass_recipient_name"</span>]:</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> col <span class="kw">in</span> df.columns:</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>            df[col] <span class="op">=</span> df[col].replace(name_map)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_shots(df):</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    shots <span class="op">=</span> df[df[<span class="st">"type_name"</span>] <span class="op">==</span> <span class="st">"Shot"</span>].copy()</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    shots[<span class="st">"goal"</span>] <span class="op">=</span> (shots[<span class="st">"outcome_name"</span>] <span class="op">==</span> <span class="st">"Goal"</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> safe_select(shots, [</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"match_id"</span>, <span class="st">"player_name"</span>, <span class="st">"team_name"</span>,</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"minute"</span>, <span class="st">"second"</span>, <span class="st">"period"</span>,</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"end_x"</span>, <span class="st">"end_y"</span>, <span class="st">"end_z"</span>,</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"shot_statsbomb_xg"</span>, <span class="st">"outcome_name"</span>,</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"technique_name"</span>, <span class="st">"body_part_name"</span>,</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">"shot_first_time"</span>, <span class="st">"shot_one_on_one"</span>,</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">"shot_open_goal"</span>, <span class="st">"under_pressure"</span>, <span class="st">"goal"</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_passes(df):</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>    passes <span class="op">=</span> df[df[<span class="st">"type_name"</span>] <span class="op">==</span> <span class="st">"Pass"</span>].copy()</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>    passes[<span class="st">"incomplete"</span>] <span class="op">=</span> passes[<span class="st">"outcome_name"</span>].isin(</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>        [<span class="st">"Incomplete"</span>, <span class="st">"Pass Offside"</span>, <span class="st">"Out"</span>]</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>    ).astype(<span class="bu">int</span>)</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> safe_select(passes, [</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>        <span class="st">"match_id"</span>, <span class="st">"player_name"</span>, <span class="st">"pass_recipient_name"</span>,</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"team_name"</span>, <span class="st">"possession_team_name"</span>,</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"minute"</span>, <span class="st">"second"</span>, <span class="st">"period"</span>,</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"end_x"</span>, <span class="st">"end_y"</span>,</span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pass_length"</span>, <span class="st">"pass_angle"</span>,</span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pass_height_name"</span>, <span class="st">"pass_cross"</span>,</span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pass_switch"</span>, <span class="st">"pass_goal_assist"</span>,</span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pass_shot_assist"</span>, <span class="st">"outcome_name"</span>,</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>        <span class="st">"under_pressure"</span>, <span class="st">"incomplete"</span></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Load all matches ---</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>all_shots  <span class="op">=</span> []</span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>all_passes <span class="op">=</span> []</span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, row <span class="kw">in</span> matches.iterrows():</span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>    df_event, _, _, _ <span class="op">=</span> parser.event(row[<span class="st">"match_id"</span>])</span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>    df_event <span class="op">=</span> clean_names(df_event)</span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a>    all_shots.append(process_shots(df_event))</span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>    all_passes.append(process_passes(df_event))</span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"✅ </span><span class="sc">{</span>row[<span class="st">'home_team_name'</span>]<span class="sc">}</span><span class="ss"> vs </span><span class="sc">{</span>row[<span class="st">'away_team_name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>shots_df  <span class="op">=</span> pd.concat(all_shots,  ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a>passes_df <span class="op">=</span> pd.concat(all_passes, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Save to DuckDB ---</span></span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>(<span class="st">"wc2022.duckdb"</span>)</span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="st">"DROP TABLE IF EXISTS matches"</span>)</span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="st">"DROP TABLE IF EXISTS shots"</span>)</span>
+<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="st">"DROP TABLE IF EXISTS passes"</span>)</span>
+<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="st">"CREATE TABLE matches AS SELECT * FROM matches"</span>)</span>
+<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="st">"CREATE TABLE shots  AS SELECT * FROM shots_df"</span>)</span>
+<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="st">"CREATE TABLE passes AS SELECT * FROM passes_df"</span>)</span>
+<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a>con.close()</span>
+<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">🦆 DuckDB saved: wc2022.duckdb"</span>)</span>
+<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   matches : </span><span class="sc">{</span><span class="bu">len</span>(matches)<span class="sc">:,}</span><span class="ss"> rows"</span>)</span>
+<span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   shots   : </span><span class="sc">{</span><span class="bu">len</span>(shots_df)<span class="sc">:,}</span><span class="ss"> rows"</span>)</span>
+<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   passes  : </span><span class="sc">{</span><span class="bu">len</span>(passes_df)<span class="sc">:,}</span><span class="ss"> rows"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>✅ Serbia vs Switzerland
+✅ Argentina vs Australia
+✅ Australia vs Denmark
+✅ Brazil vs Serbia
+✅ Tunisia vs Australia
+✅ Ecuador vs Senegal
+✅ Netherlands vs Argentina
+✅ Uruguay vs South Korea
+✅ Morocco vs Portugal
+✅ Argentina vs France
+✅ Saudi Arabia vs Mexico
+✅ Poland vs Argentina
+✅ France vs Denmark
+✅ Argentina vs Mexico
+✅ Brazil vs Switzerland
+✅ Netherlands vs Qatar
+✅ Portugal vs Switzerland
+✅ England vs Senegal
+✅ Croatia vs Morocco
+✅ Argentina vs Croatia
+✅ England vs France
+✅ France vs Morocco
+✅ Croatia vs Brazil
+✅ Morocco vs Spain
+✅ Japan vs Croatia
+✅ Brazil vs South Korea
+✅ France vs Poland
+✅ Netherlands vs United States
+✅ Portugal vs Uruguay
+✅ Spain vs Germany
+✅ Cameroon vs Serbia
+✅ Japan vs Costa Rica
+✅ Belgium vs Morocco
+✅ Germany vs Japan
+✅ United States vs Wales
+✅ Qatar vs Ecuador
+✅ Qatar vs Senegal
+✅ Argentina vs Saudi Arabia
+✅ South Korea vs Ghana
+✅ Portugal vs Ghana
+✅ Poland vs Saudi Arabia
+✅ Croatia vs Belgium
+✅ Ghana vs Uruguay
+✅ Costa Rica vs Germany
+✅ Spain vs Costa Rica
+✅ Switzerland vs Cameroon
+✅ Senegal vs Netherlands
+✅ Croatia vs Canada
+✅ Cameroon vs Brazil
+✅ France vs Australia
+✅ Iran vs United States
+✅ Morocco vs Croatia
+✅ Canada vs Morocco
+✅ Tunisia vs France
+✅ Netherlands vs Ecuador
+✅ Wales vs Iran
+✅ England vs United States
+✅ England vs Iran
+✅ Belgium vs Canada
+✅ Mexico vs Poland
+✅ South Korea vs Portugal
+✅ Wales vs England
+✅ Japan vs Spain
+✅ Denmark vs Tunisia
+
+🦆 DuckDB saved: wc2022.duckdb
+   matches : 64 rows
+   shots   : 1,494 rows
+   passes  : 68,515 rows</code></pre>
+</div>
+</div>
 <p><a href="https://github.com/tripps44/tripps44.github.io">View Full Code on GitHub</a></p>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -704,40 +1526,381 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Lorem Ipsum"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Lorem Ipsum "</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-05-19"</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [R, EDA, Soccer, Data, tidyverse]</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>Coming soon</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tools Used</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Language:** R</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Packages:** tidyverse, ggplot2, dplyr</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Findings</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>Lorem Ipsum</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## Code Sample</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co"># code</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="fu">## Links</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">View Full Code on GitHub</span><span class="co">](https://github.com/tripps44/tripps44.github.io)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Exploring Soccer Data for Analysis"</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Data collection, manipulation and visualization of Soccer data using Python"</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-05-19"</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [Python, EDA, Soccer, Data, StatsBomb]</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>Tools like StatsBomb's open data SDK, mplsoccer, and pandas have made Python the lingua franca for everything from event data wrangling to expected goals</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>modeling. This post walks through setting up a reproducible Python based analytics environment. Since I primarily use R, I am transitioning to using Python</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>and this post walks through the analytics workflow. </span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tools Used</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Language:** Python </span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**IDE:** Rstudio</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Packages:** Quarto, pandas, numpy, mplsoccer, statsbombpy, duckdb, matplotlib, plotly</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="fu">## R Reticulate to use a specific environment</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>This R block must come first before any python block in quarto. I found this out the hard way. </span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a><span class="fu">use_condaenv</span>(<span class="st">"spro"</span>, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## Python Imports</span></span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: imports</span></span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mplsoccer <span class="im">import</span> Sbopen</span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppressing StatsBomb credentials warning (free open data)</span></span>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"SB_USERNAME"</span>] <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb22-53"><a href="#cb22-53" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"SB_PASSWORD"</span>] <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-55"><a href="#cb22-55" aria-hidden="true" tabindex="-1"></a>parser <span class="op">=</span> Sbopen()</span>
+<span id="cb22-56"><a href="#cb22-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sbopen parser ready ✅"</span>)</span>
+<span id="cb22-57"><a href="#cb22-57" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"pandas    : </span><span class="sc">{</span>pd<span class="sc">.</span>__version__<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-58"><a href="#cb22-58" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"duckdb    : </span><span class="sc">{</span>duckdb<span class="sc">.</span>__version__<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-59"><a href="#cb22-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-60"><a href="#cb22-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-61"><a href="#cb22-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-62"><a href="#cb22-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-63"><a href="#cb22-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exploring All Competitions</span></span>
+<span id="cb22-64"><a href="#cb22-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-67"><a href="#cb22-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb22-68"><a href="#cb22-68" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: eda-competitions</span></span>
+<span id="cb22-69"><a href="#cb22-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-70"><a href="#cb22-70" aria-hidden="true" tabindex="-1"></a>competition <span class="op">=</span> parser.competition()</span>
+<span id="cb22-71"><a href="#cb22-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-72"><a href="#cb22-72" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total datasets available : </span><span class="sc">{</span><span class="bu">len</span>(competition)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-73"><a href="#cb22-73" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Unique competitions      : </span><span class="sc">{</span>competition[<span class="st">'competition_name'</span>]<span class="sc">.</span>nunique()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-74"><a href="#cb22-74" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Unique countries         : </span><span class="sc">{</span>competition[<span class="st">'country_name'</span>]<span class="sc">.</span>nunique()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-75"><a href="#cb22-75" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Columns available:"</span>)</span>
+<span id="cb22-76"><a href="#cb22-76" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(competition.columns.tolist())</span>
+<span id="cb22-77"><a href="#cb22-77" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-78"><a href="#cb22-78" aria-hidden="true" tabindex="-1"></a><span class="fu">## Finding all World Cup entries</span></span>
+<span id="cb22-81"><a href="#cb22-81" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb22-82"><a href="#cb22-82" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: find-world-cups</span></span>
+<span id="cb22-83"><a href="#cb22-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-84"><a href="#cb22-84" aria-hidden="true" tabindex="-1"></a>world_cups <span class="op">=</span> competition[</span>
+<span id="cb22-85"><a href="#cb22-85" aria-hidden="true" tabindex="-1"></a>    competition[<span class="st">"competition_name"</span>].<span class="bu">str</span>.contains(<span class="st">"World Cup"</span>, case<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb22-86"><a href="#cb22-86" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb22-87"><a href="#cb22-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-88"><a href="#cb22-88" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(world_cups[[<span class="st">"competition_id"</span>,</span>
+<span id="cb22-89"><a href="#cb22-89" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"competition_name"</span>,</span>
+<span id="cb22-90"><a href="#cb22-90" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"season_name"</span>,</span>
+<span id="cb22-91"><a href="#cb22-91" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"competition_gender"</span>,</span>
+<span id="cb22-92"><a href="#cb22-92" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"country_name"</span>]].to_string(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb22-93"><a href="#cb22-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-94"><a href="#cb22-94" aria-hidden="true" tabindex="-1"></a>I'm interested in exploring the 2022 world cup:</span>
+<span id="cb22-95"><a href="#cb22-95" aria-hidden="true" tabindex="-1"></a>competition_id = 43</span>
+<span id="cb22-96"><a href="#cb22-96" aria-hidden="true" tabindex="-1"></a>season_name = 2022</span>
+<span id="cb22-97"><a href="#cb22-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-98"><a href="#cb22-98" aria-hidden="true" tabindex="-1"></a><span class="fu">## Isolating Men's 2022 World Cup</span></span>
+<span id="cb22-99"><a href="#cb22-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-102"><a href="#cb22-102" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb22-103"><a href="#cb22-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: isolate-wc2022</span></span>
+<span id="cb22-104"><a href="#cb22-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-105"><a href="#cb22-105" aria-hidden="true" tabindex="-1"></a>wc_2022 <span class="op">=</span> competition[</span>
+<span id="cb22-106"><a href="#cb22-106" aria-hidden="true" tabindex="-1"></a>    (competition[<span class="st">"competition_id"</span>] <span class="op">==</span> <span class="dv">43</span>) <span class="op">&amp;</span></span>
+<span id="cb22-107"><a href="#cb22-107" aria-hidden="true" tabindex="-1"></a>    (competition[<span class="st">"season_name"</span>] <span class="op">==</span> <span class="st">"2022"</span>)</span>
+<span id="cb22-108"><a href="#cb22-108" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb22-109"><a href="#cb22-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-110"><a href="#cb22-110" aria-hidden="true" tabindex="-1"></a>COMPETITION_ID <span class="op">=</span> wc_2022[<span class="st">"competition_id"</span>].values[<span class="dv">0</span>]</span>
+<span id="cb22-111"><a href="#cb22-111" aria-hidden="true" tabindex="-1"></a>SEASON_ID      <span class="op">=</span> wc_2022[<span class="st">"season_id"</span>].values[<span class="dv">0</span>]</span>
+<span id="cb22-112"><a href="#cb22-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-113"><a href="#cb22-113" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Competition    : </span><span class="sc">{</span>wc_2022[<span class="st">'competition_name'</span>]<span class="sc">.</span>values[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-114"><a href="#cb22-114" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Season         : </span><span class="sc">{</span>wc_2022[<span class="st">'season_name'</span>]<span class="sc">.</span>values[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-115"><a href="#cb22-115" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Competition ID : </span><span class="sc">{</span>COMPETITION_ID<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-116"><a href="#cb22-116" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Season ID      : </span><span class="sc">{</span>SEASON_ID<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-117"><a href="#cb22-117" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-118"><a href="#cb22-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-119"><a href="#cb22-119" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading &amp; Exploring Matches</span></span>
+<span id="cb22-120"><a href="#cb22-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-123"><a href="#cb22-123" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb22-124"><a href="#cb22-124" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load-matches</span></span>
+<span id="cb22-125"><a href="#cb22-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-126"><a href="#cb22-126" aria-hidden="true" tabindex="-1"></a>matches <span class="op">=</span> parser.match(competition_id<span class="op">=</span>COMPETITION_ID, </span>
+<span id="cb22-127"><a href="#cb22-127" aria-hidden="true" tabindex="-1"></a>                       season_id<span class="op">=</span>SEASON_ID)</span>
+<span id="cb22-128"><a href="#cb22-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-129"><a href="#cb22-129" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total matches : </span><span class="sc">{</span><span class="bu">len</span>(matches)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-130"><a href="#cb22-130" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Tournament stages:"</span>)</span>
+<span id="cb22-131"><a href="#cb22-131" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(matches[<span class="st">"competition_stage_name"</span>].value_counts())</span>
+<span id="cb22-132"><a href="#cb22-132" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Columns available:"</span>)</span>
+<span id="cb22-133"><a href="#cb22-133" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(matches.columns.tolist())</span>
+<span id="cb22-134"><a href="#cb22-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-135"><a href="#cb22-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column Group <span class="pp">|</span> Columns <span class="pp">|</span> Useful For <span class="pp">|</span></span>
+<span id="cb22-136"><a href="#cb22-136" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb22-137"><a href="#cb22-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Match info <span class="pp">|</span> <span class="in">`match_date`</span>, <span class="in">`kick_off`</span>, <span class="in">`match_week`</span> <span class="pp">|</span> Timeline analysis <span class="pp">|</span></span>
+<span id="cb22-138"><a href="#cb22-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Scores <span class="pp">|</span> <span class="in">`home_score`</span>, <span class="in">`away_score`</span> <span class="pp">|</span> Results filtering <span class="pp">|</span></span>
+<span id="cb22-139"><a href="#cb22-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Stadium <span class="pp">|</span> <span class="in">`stadium_name`</span>, <span class="in">`stadium_country_name`</span> <span class="pp">|</span> Venue analysis <span class="pp">|</span></span>
+<span id="cb22-140"><a href="#cb22-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Manager <span class="pp">|</span> <span class="in">`home_team_managers_name`</span> <span class="pp">|</span> Tactical analysis <span class="pp">|</span></span>
+<span id="cb22-141"><a href="#cb22-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Referee <span class="pp">|</span> <span class="in">`referee_name`</span>, <span class="in">`referee_country_name`</span> <span class="pp">|</span> Bias analysis <span class="pp">|</span></span>
+<span id="cb22-142"><a href="#cb22-142" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Stage <span class="pp">|</span> <span class="in">`competition_stage_name`</span> <span class="pp">|</span> Knockout vs group <span class="pp">|</span></span>
+<span id="cb22-143"><a href="#cb22-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-144"><a href="#cb22-144" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inspecting a single match before loading all events</span></span>
+<span id="cb22-145"><a href="#cb22-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-148"><a href="#cb22-148" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb22-149"><a href="#cb22-149" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: single-match-explore</span></span>
+<span id="cb22-150"><a href="#cb22-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-151"><a href="#cb22-151" aria-hidden="true" tabindex="-1"></a>match_id <span class="op">=</span> matches[<span class="st">"match_id"</span>].iloc[<span class="dv">0</span>]</span>
+<span id="cb22-152"><a href="#cb22-152" aria-hidden="true" tabindex="-1"></a>home     <span class="op">=</span> matches[<span class="st">"home_team_name"</span>].iloc[<span class="dv">0</span>]</span>
+<span id="cb22-153"><a href="#cb22-153" aria-hidden="true" tabindex="-1"></a>away     <span class="op">=</span> matches[<span class="st">"away_team_name"</span>].iloc[<span class="dv">0</span>]</span>
+<span id="cb22-154"><a href="#cb22-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-155"><a href="#cb22-155" aria-hidden="true" tabindex="-1"></a>df_event, df_related, df_freeze, df_tactics <span class="op">=</span> parser.event(match_id)</span>
+<span id="cb22-156"><a href="#cb22-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-157"><a href="#cb22-157" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Match         : </span><span class="sc">{</span>home<span class="sc">}</span><span class="ss"> vs </span><span class="sc">{</span>away<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-158"><a href="#cb22-158" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total events  : </span><span class="sc">{</span><span class="bu">len</span>(df_event)<span class="sc">:,}</span><span class="ss">"</span>)</span>
+<span id="cb22-159"><a href="#cb22-159" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Event type breakdown:"</span>)</span>
+<span id="cb22-160"><a href="#cb22-160" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_event[<span class="st">"type_name"</span>].value_counts().head(<span class="dv">15</span>))</span>
+<span id="cb22-161"><a href="#cb22-161" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Columns available:"</span>)</span>
+<span id="cb22-162"><a href="#cb22-162" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_event.columns.tolist())</span>
+<span id="cb22-163"><a href="#cb22-163" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-164"><a href="#cb22-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-165"><a href="#cb22-165" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading + Cleaning the data</span></span>
+<span id="cb22-166"><a href="#cb22-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-167"><a href="#cb22-167" aria-hidden="true" tabindex="-1"></a><span class="fu">### Checking Names</span></span>
+<span id="cb22-168"><a href="#cb22-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-169"><a href="#cb22-169" aria-hidden="true" tabindex="-1"></a>In my UMass Amherst Sports Analytics class, for analyzing Argentina's matches, I had to adjust Messi's </span>
+<span id="cb22-170"><a href="#cb22-170" aria-hidden="true" tabindex="-1"></a>name as full names were jumbling up the plots e.g. Lionel Andrés Messi Cuccittini. Here I will check</span>
+<span id="cb22-171"><a href="#cb22-171" aria-hidden="true" tabindex="-1"></a>all the 64 matches for long names</span>
+<span id="cb22-172"><a href="#cb22-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-175"><a href="#cb22-175" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb22-176"><a href="#cb22-176" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: all-long-names</span></span>
+<span id="cb22-177"><a href="#cb22-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-178"><a href="#cb22-178" aria-hidden="true" tabindex="-1"></a>long_names <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb22-179"><a href="#cb22-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-180"><a href="#cb22-180" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, row <span class="kw">in</span> matches.iterrows():</span>
+<span id="cb22-181"><a href="#cb22-181" aria-hidden="true" tabindex="-1"></a>    df_event, _, _, _ <span class="op">=</span> parser.event(row[<span class="st">"match_id"</span>])</span>
+<span id="cb22-182"><a href="#cb22-182" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb22-183"><a href="#cb22-183" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> col <span class="kw">in</span> [<span class="st">"player_name"</span>, <span class="st">"pass_recipient_name"</span>]:</span>
+<span id="cb22-184"><a href="#cb22-184" aria-hidden="true" tabindex="-1"></a>        names <span class="op">=</span> df_event[col].dropna()</span>
+<span id="cb22-185"><a href="#cb22-185" aria-hidden="true" tabindex="-1"></a>        names <span class="op">=</span> names[names.<span class="bu">str</span>.split().<span class="bu">str</span>.<span class="bu">len</span>() <span class="op">&gt;</span> <span class="dv">3</span>].unique()</span>
+<span id="cb22-186"><a href="#cb22-186" aria-hidden="true" tabindex="-1"></a>        long_names.update(names)</span>
+<span id="cb22-187"><a href="#cb22-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-188"><a href="#cb22-188" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total long names found: </span><span class="sc">{</span><span class="bu">len</span>(long_names)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-189"><a href="#cb22-189" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Full list:"</span>)</span>
+<span id="cb22-190"><a href="#cb22-190" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> <span class="bu">sorted</span>(long_names):</span>
+<span id="cb22-191"><a href="#cb22-191" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-192"><a href="#cb22-192" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-193"><a href="#cb22-193" aria-hidden="true" tabindex="-1"></a><span class="fu">### Adjusting Names</span></span>
+<span id="cb22-194"><a href="#cb22-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-197"><a href="#cb22-197" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb22-198"><a href="#cb22-198" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: build-name-map</span></span>
+<span id="cb22-199"><a href="#cb22-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-200"><a href="#cb22-200" aria-hidden="true" tabindex="-1"></a><span class="co"># Auto shortening to First + Last word</span></span>
+<span id="cb22-201"><a href="#cb22-201" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> auto_shorten(name):</span>
+<span id="cb22-202"><a href="#cb22-202" aria-hidden="true" tabindex="-1"></a>    parts <span class="op">=</span> name.split()</span>
+<span id="cb22-203"><a href="#cb22-203" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(parts) <span class="op">&lt;=</span> <span class="dv">3</span>:</span>
+<span id="cb22-204"><a href="#cb22-204" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> name</span>
+<span id="cb22-205"><a href="#cb22-205" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span>parts[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>parts[<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb22-206"><a href="#cb22-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-207"><a href="#cb22-207" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual overrides for well known players</span></span>
+<span id="cb22-208"><a href="#cb22-208" aria-hidden="true" tabindex="-1"></a><span class="co"># where first + last word isn't their known name</span></span>
+<span id="cb22-209"><a href="#cb22-209" aria-hidden="true" tabindex="-1"></a>manual_overrides <span class="op">=</span> {</span>
+<span id="cb22-210"><a href="#cb22-210" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Lionel Andrés Messi Cuccittini"</span>          : <span class="st">"Lionel Messi"</span>,</span>
+<span id="cb22-211"><a href="#cb22-211" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cristiano Ronaldo dos Santos Aveiro"</span>      : <span class="st">"Cristiano Ronaldo"</span>,</span>
+<span id="cb22-212"><a href="#cb22-212" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Neymar da Silva Santos Junior"</span>            : <span class="st">"Neymar"</span>,</span>
+<span id="cb22-213"><a href="#cb22-213" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Vinícius José Paixão de Oliveira Júnior"</span>  : <span class="st">"Vinícius Júnior"</span>,</span>
+<span id="cb22-214"><a href="#cb22-214" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bernardo Mota Veiga de Carvalho e Silva"</span>  : <span class="st">"Bernardo Silva"</span>,</span>
+<span id="cb22-215"><a href="#cb22-215" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bruno Miguel Borges Fernandes"</span>            : <span class="st">"Bruno Fernandes"</span>,</span>
+<span id="cb22-216"><a href="#cb22-216" aria-hidden="true" tabindex="-1"></a>    <span class="st">"João Pedro Cavaco Cancelo"</span>                : <span class="st">"João Cancelo"</span>,</span>
+<span id="cb22-217"><a href="#cb22-217" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rúben Diogo Da Silva Neves"</span>               : <span class="st">"Rúben Neves"</span>,</span>
+<span id="cb22-218"><a href="#cb22-218" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rúben Santos Gato Alves Dias"</span>             : <span class="st">"Rúben Dias"</span>,</span>
+<span id="cb22-219"><a href="#cb22-219" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Daniel Alves da Silva"</span>                    : <span class="st">"Daniel Alves"</span>,</span>
+<span id="cb22-220"><a href="#cb22-220" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Danilo Luiz da Silva"</span>                     : <span class="st">"Danilo"</span>,</span>
+<span id="cb22-221"><a href="#cb22-221" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Gabriel Fernando de Jesus"</span>                : <span class="st">"Gabriel Jesus"</span>,</span>
+<span id="cb22-222"><a href="#cb22-222" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Gabriel Teodoro Martinelli Silva"</span>         : <span class="st">"Gabriel Martinelli"</span>,</span>
+<span id="cb22-223"><a href="#cb22-223" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rodrygo Silva de Goes"</span>                    : <span class="st">"Rodrygo"</span>,</span>
+<span id="cb22-224"><a href="#cb22-224" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Ederson Santana de Moraes"</span>                : <span class="st">"Ederson"</span>,</span>
+<span id="cb22-225"><a href="#cb22-225" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Thiago Emiliano da Silva"</span>                 : <span class="st">"Thiago Silva"</span>,</span>
+<span id="cb22-226"><a href="#cb22-226" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Gleison Bremer Silva Nascimento"</span>          : <span class="st">"Bremer"</span>,</span>
+<span id="cb22-227"><a href="#cb22-227" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Lucas Tolentino Coelho de Lima"</span>           : <span class="st">"Lucas"</span>,</span>
+<span id="cb22-228"><a href="#cb22-228" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Otávio Edmilson da Silva Monteiro"</span>        : <span class="st">"Otávio"</span>,</span>
+<span id="cb22-229"><a href="#cb22-229" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Kléper Laveran Lima Ferreira"</span>             : <span class="st">"Pepe"</span>,</span>
+<span id="cb22-230"><a href="#cb22-230" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Paulo Bruno Exequiel Dybala"</span>              : <span class="st">"Paulo Dybala"</span>,</span>
+<span id="cb22-231"><a href="#cb22-231" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Ángel Fabián Di María Hernández"</span>          : <span class="st">"Ángel Di María"</span>,</span>
+<span id="cb22-232"><a href="#cb22-232" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Darwin Gabriel Núñez Ribeiro"</span>             : <span class="st">"Darwin Núñez"</span>,</span>
+<span id="cb22-233"><a href="#cb22-233" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Luis Alberto Suárez Díaz"</span>                 : <span class="st">"Luis Suárez"</span>,</span>
+<span id="cb22-234"><a href="#cb22-234" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Edinson Roberto Cavani Gómez"</span>             : <span class="st">"Edinson Cavani"</span>,</span>
+<span id="cb22-235"><a href="#cb22-235" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pablo Martín Páez Gavira"</span>                 : <span class="st">"Gavi"</span>,</span>
+<span id="cb22-236"><a href="#cb22-236" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Sergio Busquets i Burgos"</span>                 : <span class="st">"Sergio Busquets"</span>,</span>
+<span id="cb22-237"><a href="#cb22-237" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Álvaro Borja Morata Martín"</span>               : <span class="st">"Álvaro Morata"</span>,</span>
+<span id="cb22-238"><a href="#cb22-238" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Theo Bernard François Hernández"</span>          : <span class="st">"Theo Hernández"</span>,</span>
+<span id="cb22-239"><a href="#cb22-239" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Raphaël Adelino José Guerreiro"</span>           : <span class="st">"Raphaël Guerreiro"</span>,</span>
+<span id="cb22-240"><a href="#cb22-240" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rafael Alexandre Conceição Leão"</span>          : <span class="st">"Rafael Leão"</span>,</span>
+<span id="cb22-241"><a href="#cb22-241" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Hirving Rodrigo Lozano Bahena"</span>            : <span class="st">"Hirving Lozano"</span>,</span>
+<span id="cb22-242"><a href="#cb22-242" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Raúl Alonso Jiménez Rodríguez"</span>            : <span class="st">"Raúl Jiménez"</span>,</span>
+<span id="cb22-243"><a href="#cb22-243" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Héctor Alfredo Moreno Herrera"</span>            : <span class="st">"Héctor Moreno"</span>,</span>
+<span id="cb22-244"><a href="#cb22-244" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Héctor Miguel Herrera López"</span>              : <span class="st">"Héctor Herrera"</span>,</span>
+<span id="cb22-245"><a href="#cb22-245" aria-hidden="true" tabindex="-1"></a>    <span class="st">"André Miguel Valente Silva"</span>               : <span class="st">"André Silva"</span>,</span>
+<span id="cb22-246"><a href="#cb22-246" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-247"><a href="#cb22-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-248"><a href="#cb22-248" aria-hidden="true" tabindex="-1"></a><span class="co"># full name map</span></span>
+<span id="cb22-249"><a href="#cb22-249" aria-hidden="true" tabindex="-1"></a>name_map <span class="op">=</span> {}</span>
+<span id="cb22-250"><a href="#cb22-250" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> <span class="bu">sorted</span>(long_names):</span>
+<span id="cb22-251"><a href="#cb22-251" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> name <span class="kw">in</span> manual_overrides:</span>
+<span id="cb22-252"><a href="#cb22-252" aria-hidden="true" tabindex="-1"></a>        name_map[name] <span class="op">=</span> manual_overrides[name]</span>
+<span id="cb22-253"><a href="#cb22-253" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb22-254"><a href="#cb22-254" aria-hidden="true" tabindex="-1"></a>        name_map[name] <span class="op">=</span> auto_shorten(name)</span>
+<span id="cb22-255"><a href="#cb22-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-256"><a href="#cb22-256" aria-hidden="true" tabindex="-1"></a><span class="co"># preview</span></span>
+<span id="cb22-257"><a href="#cb22-257" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total names adjusted: </span><span class="sc">{</span><span class="bu">len</span>(name_map)<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb22-258"><a href="#cb22-258" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> original, cleaned <span class="kw">in</span> <span class="bu">sorted</span>(name_map.items()):</span>
+<span id="cb22-259"><a href="#cb22-259" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>original<span class="sc">:&lt;50}</span><span class="ss"> → </span><span class="sc">{</span>cleaned<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-260"><a href="#cb22-260" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-263"><a href="#cb22-263" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb22-264"><a href="#cb22-264" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: name-override-fixes</span></span>
+<span id="cb22-265"><a href="#cb22-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-266"><a href="#cb22-266" aria-hidden="true" tabindex="-1"></a>additional_overrides <span class="op">=</span> {</span>
+<span id="cb22-267"><a href="#cb22-267" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Alex Sandro Lobo Silva"</span>                    : <span class="st">"Alex Sandro"</span>,</span>
+<span id="cb22-268"><a href="#cb22-268" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Antony Matheus dos Santos"</span>                 : <span class="st">"Antony"</span>,</span>
+<span id="cb22-269"><a href="#cb22-269" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bruno Guimarães Rodriguez Moura"</span>           : <span class="st">"Bruno Guimarães"</span>,</span>
+<span id="cb22-270"><a href="#cb22-270" aria-hidden="true" tabindex="-1"></a>    <span class="st">"César Jasib Montes Castro"</span>                 : <span class="st">"César Montes"</span>,</span>
+<span id="cb22-271"><a href="#cb22-271" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Diego Roberto Godín Leal"</span>                  : <span class="st">"Diego Godín"</span>,</span>
+<span id="cb22-272"><a href="#cb22-272" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Edson Omar Álvarez Velázquez"</span>              : <span class="st">"Edson Álvarez"</span>,</span>
+<span id="cb22-273"><a href="#cb22-273" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Enner Remberto Valencia Lastra"</span>            : <span class="st">"Enner Valencia"</span>,</span>
+<span id="cb22-274"><a href="#cb22-274" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Federico Santiago Valverde Dipetta"</span>        : <span class="st">"Fede Valverde"</span>,</span>
+<span id="cb22-275"><a href="#cb22-275" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Giorgian Daniel De Arrascaeta Benedetti"</span>   : <span class="st">"De Arrascaeta"</span>,</span>
+<span id="cb22-276"><a href="#cb22-276" aria-hidden="true" tabindex="-1"></a>    <span class="st">"José Andrés Guardado Hernández"</span>            : <span class="st">"Andrés Guardado"</span>,</span>
+<span id="cb22-277"><a href="#cb22-277" aria-hidden="true" tabindex="-1"></a>    <span class="st">"José Diogo Dalot Teixeira"</span>                 : <span class="st">"Diogo Dalot"</span>,</span>
+<span id="cb22-278"><a href="#cb22-278" aria-hidden="true" tabindex="-1"></a>    <span class="st">"José María Giménez de Vargas"</span>              : <span class="st">"José Giménez"</span>,</span>
+<span id="cb22-279"><a href="#cb22-279" aria-hidden="true" tabindex="-1"></a>    <span class="st">"João Maria Lobo Alves Palhinha Gonçalves"</span>  : <span class="st">"João Palhinha"</span>,</span>
+<span id="cb22-280"><a href="#cb22-280" aria-hidden="true" tabindex="-1"></a>    <span class="st">"João Mário Naval da Costa Eduardo"</span>         : <span class="st">"João Mário"</span>,</span>
+<span id="cb22-281"><a href="#cb22-281" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Martin Hongla Yma II"</span>                      : <span class="st">"Martin Hongla"</span>,</span>
+<span id="cb22-282"><a href="#cb22-282" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Matías Nicolás Viña Susperreguy"</span>           : <span class="st">"Matías Viña"</span>,</span>
+<span id="cb22-283"><a href="#cb22-283" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pedro Guilherme Abreu dos Santos"</span>          : <span class="st">"Pedro"</span>,</span>
+<span id="cb22-284"><a href="#cb22-284" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pervis Josué Estupiñán Tenorio"</span>            : <span class="st">"Pervis Estupiñán"</span>,</span>
+<span id="cb22-285"><a href="#cb22-285" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Piero Martín Hincapié Reyna"</span>               : <span class="st">"Piero Hincapié"</span>,</span>
+<span id="cb22-286"><a href="#cb22-286" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rodrigo Javier De Paul"</span>                    : <span class="st">"Rodrigo De Paul"</span>,</span>
+<span id="cb22-287"><a href="#cb22-287" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rogelio Gabriel Funes Mori"</span>                : <span class="st">"Funes Mori"</span>,</span>
+<span id="cb22-288"><a href="#cb22-288" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Weverton Pereira da Silva"</span>                 : <span class="st">"Weverton"</span>,</span>
+<span id="cb22-289"><a href="#cb22-289" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-290"><a href="#cb22-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-291"><a href="#cb22-291" aria-hidden="true" tabindex="-1"></a><span class="co"># merging into main manual_overrides</span></span>
+<span id="cb22-292"><a href="#cb22-292" aria-hidden="true" tabindex="-1"></a>manual_overrides.update(additional_overrides)</span>
+<span id="cb22-293"><a href="#cb22-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-294"><a href="#cb22-294" aria-hidden="true" tabindex="-1"></a><span class="co"># rebuilding name map</span></span>
+<span id="cb22-295"><a href="#cb22-295" aria-hidden="true" tabindex="-1"></a>name_map <span class="op">=</span> {}</span>
+<span id="cb22-296"><a href="#cb22-296" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> <span class="bu">sorted</span>(long_names):</span>
+<span id="cb22-297"><a href="#cb22-297" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> name <span class="kw">in</span> manual_overrides:</span>
+<span id="cb22-298"><a href="#cb22-298" aria-hidden="true" tabindex="-1"></a>        name_map[name] <span class="op">=</span> manual_overrides[name]</span>
+<span id="cb22-299"><a href="#cb22-299" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb22-300"><a href="#cb22-300" aria-hidden="true" tabindex="-1"></a>        name_map[name] <span class="op">=</span> auto_shorten(name)</span>
+<span id="cb22-301"><a href="#cb22-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-302"><a href="#cb22-302" aria-hidden="true" tabindex="-1"></a><span class="co"># spot check</span></span>
+<span id="cb22-303"><a href="#cb22-303" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Spot checking fixes:"</span>)</span>
+<span id="cb22-304"><a href="#cb22-304" aria-hidden="true" tabindex="-1"></a>spot_check <span class="op">=</span> [</span>
+<span id="cb22-305"><a href="#cb22-305" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Federico Santiago Valverde Dipetta"</span>,</span>
+<span id="cb22-306"><a href="#cb22-306" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bruno Guimarães Rodriguez Moura"</span>,</span>
+<span id="cb22-307"><a href="#cb22-307" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rodrigo Javier De Paul"</span>,</span>
+<span id="cb22-308"><a href="#cb22-308" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Antony Matheus dos Santos"</span>,</span>
+<span id="cb22-309"><a href="#cb22-309" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Martin Hongla Yma II"</span></span>
+<span id="cb22-310"><a href="#cb22-310" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb22-311"><a href="#cb22-311" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> spot_check:</span>
+<span id="cb22-312"><a href="#cb22-312" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>name<span class="sc">:&lt;45}</span><span class="ss"> → </span><span class="sc">{</span>name_map[name]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-313"><a href="#cb22-313" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-314"><a href="#cb22-314" aria-hidden="true" tabindex="-1"></a><span class="fu">### Loading into Duckdb</span></span>
+<span id="cb22-315"><a href="#cb22-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-318"><a href="#cb22-318" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb22-319"><a href="#cb22-319" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load-to-duckdb</span></span>
+<span id="cb22-320"><a href="#cb22-320" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb22-321"><a href="#cb22-321" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb22-322"><a href="#cb22-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-323"><a href="#cb22-323" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Helper functions ---</span></span>
+<span id="cb22-324"><a href="#cb22-324" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> safe_select(df, columns):</span>
+<span id="cb22-325"><a href="#cb22-325" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df[[col <span class="cf">for</span> col <span class="kw">in</span> columns <span class="cf">if</span> col <span class="kw">in</span> df.columns]]</span>
+<span id="cb22-326"><a href="#cb22-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-327"><a href="#cb22-327" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clean_names(df):</span>
+<span id="cb22-328"><a href="#cb22-328" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> col <span class="kw">in</span> [<span class="st">"player_name"</span>, <span class="st">"pass_recipient_name"</span>]:</span>
+<span id="cb22-329"><a href="#cb22-329" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> col <span class="kw">in</span> df.columns:</span>
+<span id="cb22-330"><a href="#cb22-330" aria-hidden="true" tabindex="-1"></a>            df[col] <span class="op">=</span> df[col].replace(name_map)</span>
+<span id="cb22-331"><a href="#cb22-331" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span>
+<span id="cb22-332"><a href="#cb22-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-333"><a href="#cb22-333" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_shots(df):</span>
+<span id="cb22-334"><a href="#cb22-334" aria-hidden="true" tabindex="-1"></a>    shots <span class="op">=</span> df[df[<span class="st">"type_name"</span>] <span class="op">==</span> <span class="st">"Shot"</span>].copy()</span>
+<span id="cb22-335"><a href="#cb22-335" aria-hidden="true" tabindex="-1"></a>    shots[<span class="st">"goal"</span>] <span class="op">=</span> (shots[<span class="st">"outcome_name"</span>] <span class="op">==</span> <span class="st">"Goal"</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb22-336"><a href="#cb22-336" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> safe_select(shots, [</span>
+<span id="cb22-337"><a href="#cb22-337" aria-hidden="true" tabindex="-1"></a>        <span class="st">"match_id"</span>, <span class="st">"player_name"</span>, <span class="st">"team_name"</span>,</span>
+<span id="cb22-338"><a href="#cb22-338" aria-hidden="true" tabindex="-1"></a>        <span class="st">"minute"</span>, <span class="st">"second"</span>, <span class="st">"period"</span>,</span>
+<span id="cb22-339"><a href="#cb22-339" aria-hidden="true" tabindex="-1"></a>        <span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"end_x"</span>, <span class="st">"end_y"</span>, <span class="st">"end_z"</span>,</span>
+<span id="cb22-340"><a href="#cb22-340" aria-hidden="true" tabindex="-1"></a>        <span class="st">"shot_statsbomb_xg"</span>, <span class="st">"outcome_name"</span>,</span>
+<span id="cb22-341"><a href="#cb22-341" aria-hidden="true" tabindex="-1"></a>        <span class="st">"technique_name"</span>, <span class="st">"body_part_name"</span>,</span>
+<span id="cb22-342"><a href="#cb22-342" aria-hidden="true" tabindex="-1"></a>        <span class="st">"shot_first_time"</span>, <span class="st">"shot_one_on_one"</span>,</span>
+<span id="cb22-343"><a href="#cb22-343" aria-hidden="true" tabindex="-1"></a>        <span class="st">"shot_open_goal"</span>, <span class="st">"under_pressure"</span>, <span class="st">"goal"</span></span>
+<span id="cb22-344"><a href="#cb22-344" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb22-345"><a href="#cb22-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-346"><a href="#cb22-346" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_passes(df):</span>
+<span id="cb22-347"><a href="#cb22-347" aria-hidden="true" tabindex="-1"></a>    passes <span class="op">=</span> df[df[<span class="st">"type_name"</span>] <span class="op">==</span> <span class="st">"Pass"</span>].copy()</span>
+<span id="cb22-348"><a href="#cb22-348" aria-hidden="true" tabindex="-1"></a>    passes[<span class="st">"incomplete"</span>] <span class="op">=</span> passes[<span class="st">"outcome_name"</span>].isin(</span>
+<span id="cb22-349"><a href="#cb22-349" aria-hidden="true" tabindex="-1"></a>        [<span class="st">"Incomplete"</span>, <span class="st">"Pass Offside"</span>, <span class="st">"Out"</span>]</span>
+<span id="cb22-350"><a href="#cb22-350" aria-hidden="true" tabindex="-1"></a>    ).astype(<span class="bu">int</span>)</span>
+<span id="cb22-351"><a href="#cb22-351" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> safe_select(passes, [</span>
+<span id="cb22-352"><a href="#cb22-352" aria-hidden="true" tabindex="-1"></a>        <span class="st">"match_id"</span>, <span class="st">"player_name"</span>, <span class="st">"pass_recipient_name"</span>,</span>
+<span id="cb22-353"><a href="#cb22-353" aria-hidden="true" tabindex="-1"></a>        <span class="st">"team_name"</span>, <span class="st">"possession_team_name"</span>,</span>
+<span id="cb22-354"><a href="#cb22-354" aria-hidden="true" tabindex="-1"></a>        <span class="st">"minute"</span>, <span class="st">"second"</span>, <span class="st">"period"</span>,</span>
+<span id="cb22-355"><a href="#cb22-355" aria-hidden="true" tabindex="-1"></a>        <span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"end_x"</span>, <span class="st">"end_y"</span>,</span>
+<span id="cb22-356"><a href="#cb22-356" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pass_length"</span>, <span class="st">"pass_angle"</span>,</span>
+<span id="cb22-357"><a href="#cb22-357" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pass_height_name"</span>, <span class="st">"pass_cross"</span>,</span>
+<span id="cb22-358"><a href="#cb22-358" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pass_switch"</span>, <span class="st">"pass_goal_assist"</span>,</span>
+<span id="cb22-359"><a href="#cb22-359" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pass_shot_assist"</span>, <span class="st">"outcome_name"</span>,</span>
+<span id="cb22-360"><a href="#cb22-360" aria-hidden="true" tabindex="-1"></a>        <span class="st">"under_pressure"</span>, <span class="st">"incomplete"</span></span>
+<span id="cb22-361"><a href="#cb22-361" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb22-362"><a href="#cb22-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-363"><a href="#cb22-363" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Load all matches ---</span></span>
+<span id="cb22-364"><a href="#cb22-364" aria-hidden="true" tabindex="-1"></a>all_shots  <span class="op">=</span> []</span>
+<span id="cb22-365"><a href="#cb22-365" aria-hidden="true" tabindex="-1"></a>all_passes <span class="op">=</span> []</span>
+<span id="cb22-366"><a href="#cb22-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-367"><a href="#cb22-367" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, row <span class="kw">in</span> matches.iterrows():</span>
+<span id="cb22-368"><a href="#cb22-368" aria-hidden="true" tabindex="-1"></a>    df_event, _, _, _ <span class="op">=</span> parser.event(row[<span class="st">"match_id"</span>])</span>
+<span id="cb22-369"><a href="#cb22-369" aria-hidden="true" tabindex="-1"></a>    df_event <span class="op">=</span> clean_names(df_event)</span>
+<span id="cb22-370"><a href="#cb22-370" aria-hidden="true" tabindex="-1"></a>    all_shots.append(process_shots(df_event))</span>
+<span id="cb22-371"><a href="#cb22-371" aria-hidden="true" tabindex="-1"></a>    all_passes.append(process_passes(df_event))</span>
+<span id="cb22-372"><a href="#cb22-372" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"✅ </span><span class="sc">{</span>row[<span class="st">'home_team_name'</span>]<span class="sc">}</span><span class="ss"> vs </span><span class="sc">{</span>row[<span class="st">'away_team_name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-373"><a href="#cb22-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-374"><a href="#cb22-374" aria-hidden="true" tabindex="-1"></a>shots_df  <span class="op">=</span> pd.concat(all_shots,  ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb22-375"><a href="#cb22-375" aria-hidden="true" tabindex="-1"></a>passes_df <span class="op">=</span> pd.concat(all_passes, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb22-376"><a href="#cb22-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-377"><a href="#cb22-377" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Save to DuckDB ---</span></span>
+<span id="cb22-378"><a href="#cb22-378" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>(<span class="st">"wc2022.duckdb"</span>)</span>
+<span id="cb22-379"><a href="#cb22-379" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="st">"DROP TABLE IF EXISTS matches"</span>)</span>
+<span id="cb22-380"><a href="#cb22-380" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="st">"DROP TABLE IF EXISTS shots"</span>)</span>
+<span id="cb22-381"><a href="#cb22-381" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="st">"DROP TABLE IF EXISTS passes"</span>)</span>
+<span id="cb22-382"><a href="#cb22-382" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="st">"CREATE TABLE matches AS SELECT * FROM matches"</span>)</span>
+<span id="cb22-383"><a href="#cb22-383" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="st">"CREATE TABLE shots  AS SELECT * FROM shots_df"</span>)</span>
+<span id="cb22-384"><a href="#cb22-384" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="st">"CREATE TABLE passes AS SELECT * FROM passes_df"</span>)</span>
+<span id="cb22-385"><a href="#cb22-385" aria-hidden="true" tabindex="-1"></a>con.close()</span>
+<span id="cb22-386"><a href="#cb22-386" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-387"><a href="#cb22-387" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">🦆 DuckDB saved: wc2022.duckdb"</span>)</span>
+<span id="cb22-388"><a href="#cb22-388" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   matches : </span><span class="sc">{</span><span class="bu">len</span>(matches)<span class="sc">:,}</span><span class="ss"> rows"</span>)</span>
+<span id="cb22-389"><a href="#cb22-389" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   shots   : </span><span class="sc">{</span><span class="bu">len</span>(shots_df)<span class="sc">:,}</span><span class="ss"> rows"</span>)</span>
+<span id="cb22-390"><a href="#cb22-390" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   passes  : </span><span class="sc">{</span><span class="bu">len</span>(passes_df)<span class="sc">:,}</span><span class="ss"> rows"</span>)</span>
+<span id="cb22-391"><a href="#cb22-391" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb22-392"><a href="#cb22-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-393"><a href="#cb22-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-394"><a href="#cb22-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-395"><a href="#cb22-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-396"><a href="#cb22-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-397"><a href="#cb22-397" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">View Full Code on GitHub</span><span class="co">](https://github.com/tripps44/tripps44.github.io)</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
