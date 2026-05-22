@@ -1,0 +1,93 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Exploring Soccer Data for Analysis\"\n",
+        "description: \"Data collection, manipulation and visualization of Soccer data using Python\"\n",
+        "date: \"2026-05-19\"\n",
+        "categories: [Python, EDA, Soccer, Data, StatsBomb]\n",
+        "format:\n",
+        "  html:\n",
+        "    code-fold: true\n",
+        "    code-tools: true\n",
+        "jupyter: python3\n",
+        "---\n",
+        "\n",
+        "## Overview\n",
+        "\n",
+        "Tools like StatsBomb's open data SDK, mplsoccer, and pandas have made Python the lingua franca for everything from event data wrangling to expected goals\n",
+        "modeling. This post walks through setting up a reproducible Python based analytics environment. Since I primarily use R, I am transitioning to using Python\n",
+        "and this post walks through the analytics workflow. \n",
+        "\n",
+        "## Tools Used\n",
+        "\n",
+        "- **Language:** Python \n",
+        "- **IDE:** Rstudio\n",
+        "- **Packages:** Quarto, pandas, numpy, mplsoccer, statsbombpy, duckdb, matplotlib, plotly\n",
+        "\n",
+        "## R Reticulate to use a specific environment\n",
+        "\n",
+        "This R block must come first before any python block. I found this out the hard way. \n",
+        "\n",
+        "```{r}\n",
+        "\n",
+        "library(reticulate)\n",
+        "use_condaenv(\"spro\", required = TRUE)\n",
+        "\n",
+        "```\n",
+        "\n",
+        "## Python Imports"
+      ],
+      "id": "43cec7fc"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "message": false
+      },
+      "source": [
+        "#| label: imports\n",
+        "#| warning: false\n",
+        "\n",
+        "import pandas as pd\n",
+        "import duckdb\n",
+        "from statsbombpy import sb\n",
+        "import os\n",
+        "\n",
+        "# Suppressing StatsBomb credentials warning (free open data)\n",
+        "os.environ[\"SB_USERNAME\"] = \"\"\n",
+        "os.environ[\"SB_PASSWORD\"] = \"\"\n",
+        "\n",
+        "print(f\"pandas    : {pd.__version__}\")\n",
+        "print(f\"duckdb    : {duckdb.__version__}\")\n",
+        "print(\"statsbombpy: ok ✅\")"
+      ],
+      "id": "imports",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Links\n",
+        "\n",
+        "[View Full Code on GitHub](https://github.com/tripps44/tripps44.github.io)"
+      ],
+      "id": "1c42aaa3"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/opt/anaconda3/envs/spro/share/jupyter/kernels/python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

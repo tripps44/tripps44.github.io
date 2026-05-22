@@ -20,18 +20,357 @@ and this post walks through the analytics workflow.
 
 - **Language:** Python 
 - **IDE:** Rstudio
-- **Packages:** Quarto, pandas, numpy, mplsoccer, statsbombpy, matplotlib, plotly
+- **Packages:** Quarto, pandas, numpy, mplsoccer, statsbombpy, duckdb, matplotlib, plotly
 
-## Code Sample
+## R Reticulate to use a specific environment
+
+This R block must come first before any python block in quarto. I found this out the hard way. 
 
 ```{r}
-#| eval: false
-library(tidyverse)
 
-# code
+library(reticulate)
+use_condaenv("spro", required = TRUE)
 
 ```
 
-## Links
+## Python Imports
+
+```{python}
+#| label: imports
+#| message: false
+#| warning: false
+
+import pandas as pd
+import duckdb
+from mplsoccer import Sbopen
+import os
+
+# Suppressing StatsBomb credentials warning (free open data)
+os.environ["SB_USERNAME"] = ""
+os.environ["SB_PASSWORD"] = ""
+
+parser = Sbopen()
+print("Sbopen parser ready ✅")
+print(f"pandas    : {pd.__version__}")
+print(f"duckdb    : {duckdb.__version__}")
+
+
+```
+
+## Exploring All Competitions
+
+```{python}
+#| label: eda-competitions
+
+competition = parser.competition()
+
+print(f"Total datasets available : {len(competition)}")
+print(f"Unique competitions      : {competition['competition_name'].nunique()}")
+print(f"Unique countries         : {competition['country_name'].nunique()}")
+print(f"\nColumns available:")
+print(competition.columns.tolist())
+```
+## Finding all World Cup entries
+```{python}
+#| label: find-world-cups
+
+world_cups = competition[
+    competition["competition_name"].str.contains("World Cup", case=False)
+]
+
+print(world_cups[["competition_id",
+                   "competition_name",
+                   "season_name",
+                   "competition_gender",
+                   "country_name"]].to_string(index=False))
+```
+I'm interested in exploring the 2022 world cup:
+competition_id = 43
+season_name = 2022
+
+## Isolating Men's 2022 World Cup
+
+```{python}
+#| label: isolate-wc2022
+
+wc_2022 = competition[
+    (competition["competition_id"] == 43) &
+    (competition["season_name"] == "2022")
+]
+
+COMPETITION_ID = wc_2022["competition_id"].values[0]
+SEASON_ID      = wc_2022["season_id"].values[0]
+
+print(f"Competition    : {wc_2022['competition_name'].values[0]}")
+print(f"Season         : {wc_2022['season_name'].values[0]}")
+print(f"Competition ID : {COMPETITION_ID}")
+print(f"Season ID      : {SEASON_ID}")
+```
+
+## Loading & Exploring Matches
+
+```{python}
+#| label: load-matches
+
+matches = parser.match(competition_id=COMPETITION_ID, 
+                       season_id=SEASON_ID)
+
+print(f"Total matches : {len(matches)}")
+print(f"\nTournament stages:")
+print(matches["competition_stage_name"].value_counts())
+print(f"\nColumns available:")
+print(matches.columns.tolist())
+```
+| Column Group | Columns | Useful For |
+|---|---|---|
+| Match info | `match_date`, `kick_off`, `match_week` | Timeline analysis |
+| Scores | `home_score`, `away_score` | Results filtering |
+| Stadium | `stadium_name`, `stadium_country_name` | Venue analysis |
+| Manager | `home_team_managers_name` | Tactical analysis |
+| Referee | `referee_name`, `referee_country_name` | Bias analysis |
+| Stage | `competition_stage_name` | Knockout vs group |
+
+## Inspecting a single match before loading all events
+
+```{python}
+#| label: single-match-explore
+
+match_id = matches["match_id"].iloc[0]
+home     = matches["home_team_name"].iloc[0]
+away     = matches["away_team_name"].iloc[0]
+
+df_event, df_related, df_freeze, df_tactics = parser.event(match_id)
+
+print(f"Match         : {home} vs {away}")
+print(f"Total events  : {len(df_event):,}")
+print(f"\nEvent type breakdown:")
+print(df_event["type_name"].value_counts().head(15))
+print(f"\nColumns available:")
+print(df_event.columns.tolist())
+```
+
+## Loading + Cleaning the data
+
+### Checking Names
+
+In my UMass Amherst Sports Analytics class, for analyzing Argentina's matches, I had to adjust Messi's 
+name as full names were jumbling up the plots e.g. Lionel Andrés Messi Cuccittini. Here I will check
+all the 64 matches for long names
+
+```{python}
+#| label: all-long-names
+
+long_names = set()
+
+for _, row in matches.iterrows():
+    df_event, _, _, _ = parser.event(row["match_id"])
+    
+    for col in ["player_name", "pass_recipient_name"]:
+        names = df_event[col].dropna()
+        names = names[names.str.split().str.len() > 3].unique()
+        long_names.update(names)
+
+print(f"Total long names found: {len(long_names)}")
+print("\nFull list:")
+for name in sorted(long_names):
+    print(f"  {name}")
+```
+### Adjusting Names
+
+```{python}
+#| label: build-name-map
+
+# Auto shortening to First + Last word
+def auto_shorten(name):
+    parts = name.split()
+    if len(parts) <= 3:
+        return name
+    return f"{parts[0]} {parts[-1]}"
+
+# Manual overrides for well known players
+# where first + last word isn't their known name
+manual_overrides = {
+    "Lionel Andrés Messi Cuccittini"          : "Lionel Messi",
+    "Cristiano Ronaldo dos Santos Aveiro"      : "Cristiano Ronaldo",
+    "Neymar da Silva Santos Junior"            : "Neymar",
+    "Vinícius José Paixão de Oliveira Júnior"  : "Vinícius Júnior",
+    "Bernardo Mota Veiga de Carvalho e Silva"  : "Bernardo Silva",
+    "Bruno Miguel Borges Fernandes"            : "Bruno Fernandes",
+    "João Pedro Cavaco Cancelo"                : "João Cancelo",
+    "Rúben Diogo Da Silva Neves"               : "Rúben Neves",
+    "Rúben Santos Gato Alves Dias"             : "Rúben Dias",
+    "Daniel Alves da Silva"                    : "Daniel Alves",
+    "Danilo Luiz da Silva"                     : "Danilo",
+    "Gabriel Fernando de Jesus"                : "Gabriel Jesus",
+    "Gabriel Teodoro Martinelli Silva"         : "Gabriel Martinelli",
+    "Rodrygo Silva de Goes"                    : "Rodrygo",
+    "Ederson Santana de Moraes"                : "Ederson",
+    "Thiago Emiliano da Silva"                 : "Thiago Silva",
+    "Gleison Bremer Silva Nascimento"          : "Bremer",
+    "Lucas Tolentino Coelho de Lima"           : "Lucas",
+    "Otávio Edmilson da Silva Monteiro"        : "Otávio",
+    "Kléper Laveran Lima Ferreira"             : "Pepe",
+    "Paulo Bruno Exequiel Dybala"              : "Paulo Dybala",
+    "Ángel Fabián Di María Hernández"          : "Ángel Di María",
+    "Darwin Gabriel Núñez Ribeiro"             : "Darwin Núñez",
+    "Luis Alberto Suárez Díaz"                 : "Luis Suárez",
+    "Edinson Roberto Cavani Gómez"             : "Edinson Cavani",
+    "Pablo Martín Páez Gavira"                 : "Gavi",
+    "Sergio Busquets i Burgos"                 : "Sergio Busquets",
+    "Álvaro Borja Morata Martín"               : "Álvaro Morata",
+    "Theo Bernard François Hernández"          : "Theo Hernández",
+    "Raphaël Adelino José Guerreiro"           : "Raphaël Guerreiro",
+    "Rafael Alexandre Conceição Leão"          : "Rafael Leão",
+    "Hirving Rodrigo Lozano Bahena"            : "Hirving Lozano",
+    "Raúl Alonso Jiménez Rodríguez"            : "Raúl Jiménez",
+    "Héctor Alfredo Moreno Herrera"            : "Héctor Moreno",
+    "Héctor Miguel Herrera López"              : "Héctor Herrera",
+    "André Miguel Valente Silva"               : "André Silva",
+}
+
+# full name map
+name_map = {}
+for name in sorted(long_names):
+    if name in manual_overrides:
+        name_map[name] = manual_overrides[name]
+    else:
+        name_map[name] = auto_shorten(name)
+
+# preview
+print(f"Total names adjusted: {len(name_map)}\n")
+for original, cleaned in sorted(name_map.items()):
+    print(f"  {original:<50} → {cleaned}")
+```
+```{python}
+#| label: name-override-fixes
+
+additional_overrides = {
+    "Alex Sandro Lobo Silva"                    : "Alex Sandro",
+    "Antony Matheus dos Santos"                 : "Antony",
+    "Bruno Guimarães Rodriguez Moura"           : "Bruno Guimarães",
+    "César Jasib Montes Castro"                 : "César Montes",
+    "Diego Roberto Godín Leal"                  : "Diego Godín",
+    "Edson Omar Álvarez Velázquez"              : "Edson Álvarez",
+    "Enner Remberto Valencia Lastra"            : "Enner Valencia",
+    "Federico Santiago Valverde Dipetta"        : "Fede Valverde",
+    "Giorgian Daniel De Arrascaeta Benedetti"   : "De Arrascaeta",
+    "José Andrés Guardado Hernández"            : "Andrés Guardado",
+    "José Diogo Dalot Teixeira"                 : "Diogo Dalot",
+    "José María Giménez de Vargas"              : "José Giménez",
+    "João Maria Lobo Alves Palhinha Gonçalves"  : "João Palhinha",
+    "João Mário Naval da Costa Eduardo"         : "João Mário",
+    "Martin Hongla Yma II"                      : "Martin Hongla",
+    "Matías Nicolás Viña Susperreguy"           : "Matías Viña",
+    "Pedro Guilherme Abreu dos Santos"          : "Pedro",
+    "Pervis Josué Estupiñán Tenorio"            : "Pervis Estupiñán",
+    "Piero Martín Hincapié Reyna"               : "Piero Hincapié",
+    "Rodrigo Javier De Paul"                    : "Rodrigo De Paul",
+    "Rogelio Gabriel Funes Mori"                : "Funes Mori",
+    "Weverton Pereira da Silva"                 : "Weverton",
+}
+
+# merging into main manual_overrides
+manual_overrides.update(additional_overrides)
+
+# rebuilding name map
+name_map = {}
+for name in sorted(long_names):
+    if name in manual_overrides:
+        name_map[name] = manual_overrides[name]
+    else:
+        name_map[name] = auto_shorten(name)
+
+# spot check
+print("Spot checking fixes:")
+spot_check = [
+    "Federico Santiago Valverde Dipetta",
+    "Bruno Guimarães Rodriguez Moura",
+    "Rodrigo Javier De Paul",
+    "Antony Matheus dos Santos",
+    "Martin Hongla Yma II"
+]
+for name in spot_check:
+    print(f"  {name:<45} → {name_map[name]}")
+```
+### Loading into Duckdb
+
+```{python}
+#| label: load-to-duckdb
+#| message: false
+#| warning: false
+
+# --- Helper functions ---
+def safe_select(df, columns):
+    return df[[col for col in columns if col in df.columns]]
+
+def clean_names(df):
+    for col in ["player_name", "pass_recipient_name"]:
+        if col in df.columns:
+            df[col] = df[col].replace(name_map)
+    return df
+
+def process_shots(df):
+    shots = df[df["type_name"] == "Shot"].copy()
+    shots["goal"] = (shots["outcome_name"] == "Goal").astype(int)
+    return safe_select(shots, [
+        "match_id", "player_name", "team_name",
+        "minute", "second", "period",
+        "x", "y", "end_x", "end_y", "end_z",
+        "shot_statsbomb_xg", "outcome_name",
+        "technique_name", "body_part_name",
+        "shot_first_time", "shot_one_on_one",
+        "shot_open_goal", "under_pressure", "goal"
+    ])
+
+def process_passes(df):
+    passes = df[df["type_name"] == "Pass"].copy()
+    passes["incomplete"] = passes["outcome_name"].isin(
+        ["Incomplete", "Pass Offside", "Out"]
+    ).astype(int)
+    return safe_select(passes, [
+        "match_id", "player_name", "pass_recipient_name",
+        "team_name", "possession_team_name",
+        "minute", "second", "period",
+        "x", "y", "end_x", "end_y",
+        "pass_length", "pass_angle",
+        "pass_height_name", "pass_cross",
+        "pass_switch", "pass_goal_assist",
+        "pass_shot_assist", "outcome_name",
+        "under_pressure", "incomplete"
+    ])
+
+# --- Load all matches ---
+all_shots  = []
+all_passes = []
+
+for _, row in matches.iterrows():
+    df_event, _, _, _ = parser.event(row["match_id"])
+    df_event = clean_names(df_event)
+    all_shots.append(process_shots(df_event))
+    all_passes.append(process_passes(df_event))
+    print(f"✅ {row['home_team_name']} vs {row['away_team_name']}")
+
+shots_df  = pd.concat(all_shots,  ignore_index=True)
+passes_df = pd.concat(all_passes, ignore_index=True)
+
+# --- Save to DuckDB ---
+con = duckdb.connect("wc2022.duckdb")
+con.execute("DROP TABLE IF EXISTS matches")
+con.execute("DROP TABLE IF EXISTS shots")
+con.execute("DROP TABLE IF EXISTS passes")
+con.execute("CREATE TABLE matches AS SELECT * FROM matches")
+con.execute("CREATE TABLE shots  AS SELECT * FROM shots_df")
+con.execute("CREATE TABLE passes AS SELECT * FROM passes_df")
+con.close()
+
+print(f"\n🦆 DuckDB saved: wc2022.duckdb")
+print(f"   matches : {len(matches):,} rows")
+print(f"   shots   : {len(shots_df):,} rows")
+print(f"   passes  : {len(passes_df):,} rows")
+```
+
+
+
+
 
 [View Full Code on GitHub](https://github.com/tripps44/tripps44.github.io)
