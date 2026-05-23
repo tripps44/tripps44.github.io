@@ -1,8 +1,8 @@
 ---
 title: "Exploring Soccer Data for Analysis"
-description: "Data collection, manipulation and visualization of Soccer data using Python"
+description: "Data collection of Soccer data using Python "
 date: "2026-05-19"
-categories: [Python, EDA, Soccer, Data, StatsBomb]
+categories: [Python, EDA, Soccer, Data, StatsBomb, DuckDB]
 format:
   html:
     code-fold: true
@@ -13,14 +13,14 @@ jupyter: python3
 ## Overview
 
 Tools like StatsBomb's open data SDK, mplsoccer, and pandas have made Python the lingua franca for everything from event data wrangling to expected goals
-modeling. This post walks through setting up a reproducible Python based analytics environment. Since I primarily use R, I am transitioning to using Python
-and this post walks through the analytics workflow. 
+modeling. Since I primarily use R, I am transitioning to using Python and this post walks through the analytics workflow of obtaining the data and storing 
+within duckdb
 
 ## Tools Used
 
-- **Language:** Python 
+- **Languages:** Python, R
 - **IDE:** Rstudio
-- **Packages:** Quarto, pandas, numpy, mplsoccer, statsbombpy, duckdb, matplotlib, plotly
+- **Packages:** Quarto, pandas, mplsoccer, duckdb
 
 ## R Reticulate to use a specific environment
 
@@ -299,7 +299,7 @@ for name in spot_check:
 #| message: false
 #| warning: false
 
-# --- Helper functions ---
+# Helper functions
 def safe_select(df, columns):
     return df[[col for col in columns if col in df.columns]]
 
@@ -339,7 +339,7 @@ def process_passes(df):
         "under_pressure", "incomplete"
     ])
 
-# --- Load all matches ---
+# Load all matches
 all_shots  = []
 all_passes = []
 
@@ -353,7 +353,7 @@ for _, row in matches.iterrows():
 shots_df  = pd.concat(all_shots,  ignore_index=True)
 passes_df = pd.concat(all_passes, ignore_index=True)
 
-# --- Save to DuckDB ---
+# Save to DuckDB 
 con = duckdb.connect("wc2022.duckdb")
 con.execute("DROP TABLE IF EXISTS matches")
 con.execute("DROP TABLE IF EXISTS shots")
@@ -369,7 +369,24 @@ print(f"   shots   : {len(shots_df):,} rows")
 print(f"   passes  : {len(passes_df):,} rows")
 ```
 
+## Why DuckDB?
 
+  I first heard about duckdb on youtube (Thanks to Dr.Higgins) and use it for many projects.
+    
+  {{< video https://www.youtube.com/watch?v=Yxeic7WXzFw >}}
+  
+  In addition I like to explore the data offline using SQL and the <a href="https://motherduck.com/blog/local-duckdb-ui-visual-data-analysis/" 
+  target="_blank"> Duck DB Local UI</a>
+    
+  For example, I want to know the top 5 players who had the most passes in the 2022 world cup (click on the image to zoom in):
+  
+  ![LocalDuckUIScreenshot](images/localDuckUI.png){.lightbox width="80%"}
+    
+    
+    
+    
+    
+    
 
 
 

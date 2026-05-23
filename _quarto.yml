@@ -28,6 +28,7 @@ format:
     code-tools: true
     highlight-style: github
     toc: true
+    lightbox: true
 
 execute:
   freeze: auto
