@@ -8,7 +8,7 @@ image: thumbnail.png
 
 ## Overview
 Comparative scouting analysis of the New England Patriots and 
-Los Angeles Rams using NFL play-by-play data, built entirely in R.
+Los Angeles Rams using NFL play-by-play data, built entirely in R and Quarto.
 
 ## Metrics Analyzed
 - Pass/run rate splits
@@ -23,4 +23,721 @@ Los Angeles Rams using NFL play-by-play data, built entirely in R.
 - flextable
 - patchwork
 
-*Full analysis and visualizations coming soon.*
+
+
+# Loading Packages
+
+```{r setup, echo=TRUE, output=FALSE}
+# packages
+library(tidyverse)
+library(rvest)
+library(nflreadr)
+library(janitor)
+library(descr)
+library(flextable)
+library(patchwork)
+```
+
+# Task 1 - NFL Scouting Reports
+
+```{r, echo=TRUE, output=FALSE}
+# loading the data
+pbp <- load_pbp(2025)
+```
+
+
+```{r}
+# creating the variables
+pbp <- pbp |> 
+  mutate(    dome = case_when (
+    roof== "dome" ~ 1,
+    roof== "closed" ~ 1,
+    roof== "outdoors" ~ 0,
+    roof== "open" ~ 0), 
+    wind_group = case_when(
+      wind >= 0 & wind <= 2 ~ "no breeze",
+      dome ==1 ~ "no breeze",
+      wind >= 3 & wind <= 7 ~ "light breeze",
+      wind >= 8 & wind <= 14 ~ "moderate breeze",
+      wind >= 15 & wind <= 25 ~ "strong breeze",
+      wind > 25 ~ "strong gusts",
+      TRUE ~ NA_character_), 
+    wind_speed = if_else(dome==0, wind, 0), 
+    fg_distance=yardline_100+17, 
+    fg_group = case_when(
+      fg_distance < 30  ~ "<30",
+      fg_distance >= 30 & fg_distance <= 39 ~ "30-39",
+      fg_distance >= 40 & fg_distance <= 44 ~ "40-44",
+      fg_distance >= 45 & fg_distance <= 49 ~ "45-49",
+      fg_distance >= 50 & fg_distance <= 55 ~ "50-55",
+      fg_distance > 55 & fg_distance <= 60  ~ "55-60",
+      fg_distance > 60   ~ "60+",
+      TRUE ~ NA_character_), 
+    fg_50_plus = if_else(fg_distance >49, 1, 0),  
+    fg_long = if_else(fg_distance >54, 1, 0),  
+    fg_made = case_when(
+      field_goal_result == "made" ~ 1,
+      field_goal_result == "missed" ~ 0,
+      field_goal_result == "blocked" ~ 0,
+      TRUE ~ NA_real_  ), 
+    field_position_group = case_when(
+      yardline_100 <=10 ~ "inside 10",
+      yardline_100 >10 & yardline_100 <= 20 ~ "red zone",
+      yardline_100 > 20 & yardline_100 <= 45 ~ "driving zone",
+      yardline_100 > 45 & yardline_100 <= 55 ~ "midfield",
+      yardline_100 > 55 & yardline_100 <= 80 ~ "opp zone",
+      yardline_100 > 80 & yardline_100 <= 95 ~ "opp red zone",
+      yardline_100 > 95 & yardline_100 <= 99 ~ "inside opp 5",
+      TRUE ~ NA_character_), 
+    drive_points = case_when(
+      fixed_drive_result == "Touchdown" ~ 7,
+      fixed_drive_result == "Field goal" ~ 3,
+      fixed_drive_result == "Safety" ~ -2,
+      fixed_drive_result == "Opp touchdown" ~ -7,
+      TRUE ~ 0), 
+    to_go = case_when(
+      ydstogo == 1 ~ 1,
+      ydstogo %in% 2:3 ~ 2,
+      ydstogo %in% 4:6 ~ 3,
+      ydstogo %in% 7:9 ~ 4,
+      ydstogo %in% 10:14 ~ 5,
+      ydstogo >= 15 ~ 6,
+      TRUE ~ NA_real_ ),
+    to_go_f = factor(to_go, 
+                     levels = 1:6, 
+                     labels = c("1 yard", "2-3 yards", "4-6 yards", "7-9 yards", "10-14 yards", "15+ yards")))
+```
+
+
+
+```{r}
+# specific dataframes for first half only
+
+# All Team's Deep Dive on Passing Tendencies in First Half
+rate_all <- pbp |> 
+  filter(
+    down %in% 1:3,
+    game_seconds_remaining > 1799,
+    pass_attempt %in% c(0,1) | rush_attempt %in% c(0,1),
+    goal_to_go==0
+  ) |> 
+  group_by(down, to_go_f) |> 
+  summarise(
+    pass_percent = mean(pass_attempt, na.rm = TRUE),
+    pass_att = sum(pass_attempt, na.rm = TRUE),
+    plays = n(),
+    .groups = "drop"
+  )
+
+rate_all.plot <- ggplot(rate_all, aes(x = to_go_f, y = factor(down), fill = pass_percent)) +
+  geom_tile(color = "white") +
+  geom_text(
+    aes(label = paste0(
+      scales::percent(pass_percent, accuracy = 1), "\n(",
+      plays, ")")),
+    color = "black",
+    lineheight = 0.9,
+    size = 4) +
+  scale_fill_gradient(
+    low = "antiquewhite",
+    high = "#46b478",
+    labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Yards to Go",
+       y = "Down",
+       fill = "Pass %",
+       title = "NFL Probability of Passing by Down and Distance (2025)") +
+  theme_minimal(base_size = 14) +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),
+        panel.grid = element_blank())
+
+# check
+# rate_all.plot
+
+```
+
+
+
+```{r}
+# New England
+# Deep Dive on Passing Tendencies in First Half
+pats.rate <- pbp |> 
+  filter(
+    down %in% 1:3,
+    posteam == "NE",
+    game_seconds_remaining > 1799,
+    pass_attempt %in% c(0,1) | rush_attempt %in% c(0,1),
+    goal_to_go==0
+  ) |> 
+  group_by(down, to_go_f) |> 
+  summarise(
+    pass_percent = mean(pass_attempt, na.rm = TRUE),
+    pass_att = sum(pass_attempt, na.rm = TRUE),
+    plays = n(),
+    .groups = "drop"
+  )
+
+pats.rate.plot <- ggplot(pats.rate, aes(x = to_go_f, y = factor(down), fill = pass_percent)) +
+  geom_tile(color = "white") +
+  geom_text(
+    aes(label = paste0(
+      scales::percent(pass_percent, accuracy = 1), "\n(",
+      plays, ")")),
+    color = "black",
+    lineheight = 0.9,
+    size = 4) +
+  scale_fill_gradient(
+    low = "#0c8dc6",
+    high = "#C60C30",
+    labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Yards to Go",
+       y = "Down",
+       fill = "Pass %",
+       title = "Patriots Probability of Passing by Down and Distance (2025)") +
+  theme_minimal(base_size = 14) +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),
+        panel.grid = element_blank())
+
+# check
+# pats.rate.plot
+
+```
+
+
+```{r}
+# Los Angeles
+# Deep Dive on Passing Tendencies in First Half
+rams.rate <- pbp |> 
+  filter(
+    down %in% 1:3,
+    posteam == "LA",
+    game_seconds_remaining > 1799,
+    pass_attempt %in% c(0,1) | rush_attempt %in% c(0,1),
+    goal_to_go==0
+  ) |> 
+  group_by(down, to_go_f) |> 
+  summarise(
+    pass_percent = mean(pass_attempt, na.rm = TRUE),
+    pass_att = sum(pass_attempt, na.rm = TRUE),
+    plays = n(),
+    .groups = "drop"
+  )
+
+rams.rate.plot <- ggplot(rams.rate, aes(x = to_go_f, y = factor(down), fill = pass_percent)) +
+  geom_tile(color = "white") +
+  geom_text(
+    aes(label = paste0(
+      scales::percent(pass_percent, accuracy = 1), "\n(",
+      plays, ")")),
+    color = "black",
+    lineheight = 0.9,
+    size = 4) +
+  scale_fill_gradient(
+    low = "#00aeff",
+    high = "#FFD100",
+    labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Yards to Go",
+       y = "Down",
+       fill = "Pass %",
+       title = "LA Rams Probability of Passing by Down and Distance (2025)") +
+  theme_minimal(base_size = 14) +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),
+        panel.grid = element_blank())
+
+# check
+# rams.rate.plot
+
+```
+
+# 1.1 Pass/Run Rates
+```{r}
+rate_all.plot / pats.rate.plot
+```
+Based on comparison to NFL 2025 metrics, the New England Patriots seem to be predictable
+for these scenarios:
+
+On 2nd down and 1 yard to go, the Patriots prefer to run the ball (13% pass rate vs NFL average of 28%)
+On 2nd down and 10-14 yards to to, the Patriots prefer to pass (76% vs NFL average of 64%)
+
+```{r}
+rate_all.plot / rams.rate.plot
+```
+Based on comparison to NFL 2025 metrics, the LA Rams seem to be more evenly balanced
+compared to the New England Patriots. 
+
+One scenario that stands out is 2nd down and 10-14 yards to go. Here, the LA Rams
+prefer to pass the ball (78% vs 64% NFL average)
+
+## 1.2 Snaps from shotgun or under center
+
+```{r}
+# All NFL snaps
+snaps_all <- pbp |> 
+  filter(
+    down %in% 1:3,
+    game_seconds_remaining > 1799,
+    pass_attempt %in% c(0,1) | rush_attempt %in% c(0,1),
+    goal_to_go==0) %>%
+  group_by(down, to_go_f, shotgun) |> 
+  summarise(
+    pass_percent = mean(pass_attempt, na.rm = TRUE),
+    pass_att = sum(pass_attempt, na.rm = TRUE),
+    plays = n(),
+    .groups = "drop")
+
+snaps_all.plot <-  ggplot(snaps_all, aes(x = to_go_f, y = factor(down), fill = pass_percent)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = paste0(
+      scales::percent(pass_percent, accuracy = 1), "\n(",plays, ")")),
+    color = "black",
+    lineheight = 0.9,
+    size = 4) +
+  scale_fill_gradient(
+    low = "antiquewhite",
+    high = "#46b478",
+    labels = scales::percent_format(accuracy = 1)) +
+  facet_wrap(~ shotgun, nrow = 1,
+             labeller = labeller(
+               shotgun = c(`0` = "Under Center", `1` = "Shotgun"))) +
+  labs(x = "Yards to Go",
+    y = "Down",
+    fill = "Pass %",
+    title = "NFL Probability of Passing by Down, Distance & Formation (2025)") +
+  theme_minimal(base_size = 12) +
+  theme(plot.title = element_text(size = 12)) +
+  theme(axis.text.x = element_text(size = 8, angle = 45)) + 
+  theme(axis.title.y = element_text(angle = 0, 
+                                    vjust = 0.5,
+                                    ),
+    panel.grid = element_blank())
+
+# check
+# snaps_all.plot 
+```
+
+
+```{r}
+# New England snaps
+snaps_all.pats <- pbp |> 
+  filter(
+    down %in% 1:3,
+    posteam == "NE", # pats only
+    game_seconds_remaining > 1799,
+    pass_attempt %in% c(0,1) | rush_attempt %in% c(0,1),
+    goal_to_go==0) %>%
+  group_by(down, to_go_f, shotgun) |> 
+  summarise(
+    pass_percent = mean(pass_attempt, na.rm = TRUE),
+    pass_att = sum(pass_attempt, na.rm = TRUE),
+    plays = n(),
+    .groups = "drop")
+
+snaps_all.pats.plot <-  ggplot(snaps_all.pats , aes(x = to_go_f, y = factor(down), fill = pass_percent)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = paste0(
+      scales::percent(pass_percent, accuracy = 1), "\n(",plays, ")")),
+    color = "black",
+    lineheight = 0.9,
+    size = 4) +
+  scale_fill_gradient(
+    low = "#0c8dc6",
+    high = "#C60C30",
+    labels = scales::percent_format(accuracy = 1)) +
+  facet_wrap(~ shotgun, nrow = 1,
+             labeller = labeller(
+               shotgun = c(`0` = "Under Center", `1` = "Shotgun"))) +
+  labs(x = "Yards to Go",
+    y = "Down",
+    fill = "Pass %",
+    title = "New England Patriots - Probability of Passing by Down, Distance & Formation (2025)") +
+  theme_minimal(base_size = 12) +
+  theme(plot.title = element_text(size = 12)) +
+  theme(axis.text.x = element_text(size = 8, angle = 45)) + 
+  theme(axis.title.y = element_text(angle = 0, 
+                                    vjust = 0.5,
+                                    ),
+    panel.grid = element_blank())
+
+# check
+# snaps_all.pats.plot 
+```
+
+
+
+```{r}
+# Los Angeles snaps
+snaps_all.rams <- pbp |> 
+  filter(
+    down %in% 1:3,
+    posteam == "LA", # rams only
+    game_seconds_remaining > 1799,
+    pass_attempt %in% c(0,1) | rush_attempt %in% c(0,1),
+    goal_to_go==0) %>%
+  group_by(down, to_go_f, shotgun) |> 
+  summarise(
+    pass_percent = mean(pass_attempt, na.rm = TRUE),
+    pass_att = sum(pass_attempt, na.rm = TRUE),
+    plays = n(),
+    .groups = "drop")
+
+snaps_all.rams.plot <-  ggplot(snaps_all.rams , aes(x = to_go_f, y = factor(down), fill = pass_percent)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = paste0(
+      scales::percent(pass_percent, accuracy = 1), "\n(",plays, ")")),
+    color = "black",
+    lineheight = 0.9,
+    size = 4) +
+  scale_fill_gradient(
+    low = "#00aeff",
+    high = "#FFD100",
+    labels = scales::percent_format(accuracy = 1)) +
+  facet_wrap(~ shotgun, nrow = 1,
+             labeller = labeller(
+               shotgun = c(`0` = "Under Center", `1` = "Shotgun"))) +
+  labs(x = "Yards to Go",
+    y = "Down",
+    fill = "Pass %",
+    title = "Los Angeles Rams - Probability of Passing by Down, Distance & Formation (2025)") +
+  theme_minimal(base_size = 12) +
+  theme(plot.title = element_text(size = 12)) +
+  theme(axis.text.x = element_text(size = 8, angle = 45)) + 
+  theme(axis.title.y = element_text(angle = 0, 
+                                    vjust = 0.5,
+                                    ),
+    panel.grid = element_blank())
+
+# check
+# snaps_all.rams.plot 
+```
+
+
+```{r}
+snaps_all.plot
+snaps_all.pats.plot
+```
+The heatmaps show that both the Patriots and Rams use the shotgun formation more 
+than under center overall. 
+
+For 1st down and 10-14 yards to go, Patriots are more likely to pass when using
+the shotgun formation (64% pass rate compared to NFL's 59% pass rate)
+
+For 2nd down and 7-9 yards to go, Patriots are more likely to run the ball
+when using under center formation (30% pass rate compared to NFL's 44% pass rate)
+
+For 3rd down and 2-3 yards to go, Patriots are more likely to pass the ball
+when using shotgun formation (69% pass rate compare to NFL's 59% pass rate)
+
+
+```{r}
+snaps_all.rams.plot
+```
+The LA rams seem to be more pass heavy on 2nd down from 4-6 yards (42% compared to NFL's 29%)
+and on 2nd down & 7-9 yards (57% compared to NFL's 44%) for under center formation.
+
+Overall LA seems to be more of a passing team compared to NFL averages when using Shotgun
+formation. 
+
+1st down & 10-14 yards to go, LA passes more than NFL (77% pass rate vs NFL's 59%)
+
+2nd down & 10-14 yards to go, LA passes more than NFL (85% pass rate vs NFL's 69%)
+
+3rd down & 2-3 yards to go, LA passes more than NFL (83% pass rate vs NFL's 59%)
+
+3rd down & 4-6 yards to go, LA passes more than NF (92% pass rate vs NFL's 79%)
+
+Compared to the Patriots, LA seems to pass the ball a lot more than average (from shotgun) 
+and on 2nd down and 2 to 9 yards to go (under center). 
+This is something opposing teams can take into account. 
+
+
+## 1.3 Going for it on 4th Down
+
+```{r}
+fourth.all <-pbp |>  
+    filter(down == 4,
+    game_seconds_remaining > 1799,
+    goal_to_go==0,
+    fourth_down_failed ==1 | fourth_down_converted == 1
+    ) |> 
+ 
+  group_by(to_go_f) |>  
+  summarise(pass_percent = mean(pass_attempt, na.rm = TRUE),
+            Attempts=n())|> 
+  mutate(Team = "NFL")
+
+```
+
+
+```{r}
+# New England
+fourth.pats <-pbp |>  
+    filter(down == 4,
+    posteam == "NE", # pats only
+    game_seconds_remaining > 1799,
+    goal_to_go==0,
+    fourth_down_failed ==1 | fourth_down_converted == 1
+    ) |> 
+ 
+  group_by(to_go_f) |>  
+  summarise(pass_percent = mean(pass_attempt, na.rm = TRUE),
+            Attempts=n()) |> 
+  mutate(Team = "Patriots")
+```
+
+
+```{r}
+# Los Angeles 
+fourth.rams <-pbp |>  
+    filter(down == 4,
+    posteam == "LA", # rams only
+    game_seconds_remaining > 1799,
+    goal_to_go==0,
+    fourth_down_failed ==1 | fourth_down_converted == 1
+    ) |> 
+ 
+  group_by(to_go_f) |>  
+  summarise(pass_percent = mean(pass_attempt, na.rm = TRUE),
+            Attempts=n()) |> 
+  mutate(Team = "Rams")
+
+```
+
+
+```{r}
+fourth.combined <- bind_rows(fourth.all, fourth.pats, fourth.rams) |> 
+  select(Team, everything()) 
+
+fourth.combined |> 
+  flextable() |> 
+  set_header_labels(
+    to_go_f = "Yards to Go",
+    pass_percent = "Pass Rate"
+  ) |>
+  bg(i = ~ Team == "NFL", bg = "antiquewhite") |>
+  bg(i = ~ Team == "Patriots", bg = "lightblue") |>
+  bg(i = ~ Team == "Rams", bg = "#FFD100") |>
+  bold(j = "Team") |>
+  merge_v(j = "Team") |>
+  valign(valign = "top", j = "Team") |>
+  autofit()
+```
+
+Based on the table above:
+1 yard to go - Both teams go for it (run the ball) as their pass rates are quite low and matches what
+most teams in the NFL do
+
+2 to 3 yards to go - Teams in the NFL are likely to pass as the average is close to 90%. Here, the 
+Patriots are below the NFL average so can be expected to run the ball. For Rams, they most likely will
+pass when going for it, but for the first half the sample sizes for both teams is quite low.
+
+
+
+## 1.4 Goal to go 
+
+
+```{r}
+
+rate_all.gtg <- pbp |> 
+  filter(
+    down %in% 1:3,
+
+    pass_attempt %in% c(0,1) | rush_attempt %in% c(0,1),
+    goal_to_go==1
+  ) |> 
+  group_by(down, to_go_f) |> 
+  summarise(
+    pass_percent = mean(pass_attempt, na.rm = TRUE),
+    pass_att = sum(pass_attempt, na.rm = TRUE),
+    plays = n(),
+    .groups = "drop"
+  )
+
+rate_all.gtg.plot <- ggplot(rate_all.gtg, aes(x = to_go_f, y = factor(down), fill = pass_percent)) +
+  geom_tile(color = "white") +
+  geom_text(
+    aes(label = paste0(
+      scales::percent(pass_percent, accuracy = 1), "\n(",
+      plays, ")")),
+    color = "black",
+    lineheight = 0.9,
+    size = 4) +
+  scale_fill_gradient(
+    low = "antiquewhite",
+    high = "#46b478",
+    labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Yards to Go",
+       y = "Down",
+       fill = "Pass %",
+       title = "NFL Probability of Passing by Down and Distance (2025)",
+       subtitle = "For Goal to Go situations") +
+       
+  theme_minimal(base_size = 11) +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),
+        panel.grid = element_blank())
+
+# check
+# rate_all.gtg.plot
+
+```
+
+
+```{r}
+
+pats.gtg <- pbp |> 
+  filter(
+    down %in% 1:3,
+    posteam == "NE", # pats only
+
+    pass_attempt %in% c(0,1) | rush_attempt %in% c(0,1),
+    goal_to_go==1
+  ) |> 
+  group_by(down, to_go_f) |> 
+  summarise(
+    pass_percent = mean(pass_attempt, na.rm = TRUE),
+    pass_att = sum(pass_attempt, na.rm = TRUE),
+    plays = n(),
+    .groups = "drop"
+  )
+
+pats.gtg.plot <- ggplot(pats.gtg, aes(x = to_go_f, y = factor(down), fill = pass_percent)) +
+  geom_tile(color = "white") +
+  geom_text(
+    aes(label = paste0(
+      scales::percent(pass_percent, accuracy = 1), "\n(",
+      plays, ")")),
+    color = "black",
+    lineheight = 0.9,
+    size = 4) +
+  scale_fill_gradient(
+    low = "#0c8dc6",
+    high = "#C60C30",
+    labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Yards to Go",
+       y = "Down",
+       fill = "Pass %",
+       title = "New England Patriots - Probability of Passing by Down and Distance (2025)",
+       subtitle = "For Goal to Go situations") +
+       
+  theme_minimal(base_size = 11) +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),
+        panel.grid = element_blank())
+
+# check
+# pats.gtg.plot
+
+```
+
+
+```{r}
+
+rams.gtg <- pbp |> 
+  filter(
+    down %in% 1:3,
+    posteam == "LA", # rams only
+
+    pass_attempt %in% c(0,1) | rush_attempt %in% c(0,1),
+    goal_to_go==1
+  ) |> 
+  group_by(down, to_go_f) |> 
+  summarise(
+    pass_percent = mean(pass_attempt, na.rm = TRUE),
+    pass_att = sum(pass_attempt, na.rm = TRUE),
+    plays = n(),
+    .groups = "drop"
+  )
+
+rams.gtg.plot <- ggplot(rams.gtg, aes(x = to_go_f, y = factor(down), fill = pass_percent)) +
+  geom_tile(color = "white") +
+  geom_text(
+    aes(label = paste0(
+      scales::percent(pass_percent, accuracy = 1), "\n(",
+      plays, ")"),),
+    color = "black",
+    lineheight = 0.9,
+    size = 4) +
+  scale_fill_gradient(
+    low = "#00aeff",
+    high = "#FFD100",
+    labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Yards to Go",
+       y = "Down",
+       fill = "Pass %",
+       title = "Los Angeles Rams - Probability of Passing by Down and Distance (2025)",
+       subtitle = "For Goal to Go situations") +
+       
+  theme_minimal(base_size = 11) +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),
+        panel.grid = element_blank())
+
+# check
+# rams.gtg.plot
+
+```
+
+
+
+```{r}
+rate_all.gtg.plot / pats.gtg.plot
+```
+For Goal to go situations:
+On 1st down & 7-9 yards to go, the Patriots are more likely to run the ball
+(18% pass rate vs NFL's 29%)
+
+On 2nd & 2-3 yards to go, the Patriots are more likely to pass the ball
+(60% pass rate vs NFL's 41%)
+
+On 3rd down & 2-3 yards to go, the Patriots are more likely to pass the ball
+(100% pass rate vs NFL's 53%)
+
+
+```{r}
+rate_all.gtg.plot / rams.gtg.plot
+```
+For Goal to go situations:
+
+On 2nd down & 1 yard to go, the LA Rams are more likely to pass the ball 
+(71% pass rate vs NFL's 19%)
+
+On 2nd & 3rd down with 7 to 14 yards to go, the LA Rams have passed the ball. 
+However, these are all single attempts only for goal to go situations. 
+As the previous analysis has shown that LA Rams are a pass oriented team and 
+therefore they will have the tendency to pass rather than run the ball on 2nd and 3rd down
+with more than 7 yards to go
+
+
+```{r}
+fourthAndGoal <- pbp |> 
+  filter(
+    down == 4,
+    goal_to_go==1,
+     posteam %in% c("NE", "LA") 
+  ) |> 
+  
+  mutate( go.for.it = if_else(
+    fourth_down_converted == 1 | fourth_down_failed == 1,
+    1,0
+  )
+    ) |> 
+  group_by(posteam) |>
+  summarise(
+    go.for.it.rate = mean(go.for.it, na.rm = TRUE),
+    .groups = "drop"
+  ) 
+
+fourthAndGoal |> 
+  flextable() |> 
+  set_header_labels(
+    posteam = "Team",
+    go.for.it.rate = "Go For it Rate"
+  ) |>
+  autofit()
+```
+
+Based on the table above, the LA Rams seem to go for it slightly more than the Patriots given their
+tendency on being a more pass oriented team
+
+
+
+
+
+
+
