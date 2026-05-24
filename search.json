@@ -28,11 +28,116 @@
     "text": "Education\nM.Sc. Data Analytics & Computational Social Science - University of Massachusetts Amherst\nB.Sc. Finance - Syracuse University"
   },
   {
-    "objectID": "projects.html",
-    "href": "projects.html",
+    "objectID": "projects/posts/ai-perception/index.html",
+    "href": "projects/posts/ai-perception/index.html",
+    "title": "AI Perception: Quantitative Survey Analysis",
+    "section": "",
+    "text": "This study investigates whether the frequency of interaction with artificial intelligence influences individuals’ perceptions of AI. Specifically, it examines whether regular AI exposure correlates with more positive or neutral or negative concerns."
+  },
+  {
+    "objectID": "projects/posts/ai-perception/index.html#overview",
+    "href": "projects/posts/ai-perception/index.html#overview",
+    "title": "AI Perception: Quantitative Survey Analysis",
+    "section": "",
+    "text": "This study investigates whether the frequency of interaction with artificial intelligence influences individuals’ perceptions of AI. Specifically, it examines whether regular AI exposure correlates with more positive or neutral or negative concerns."
+  },
+  {
+    "objectID": "projects/posts/ai-perception/index.html#full-report",
+    "href": "projects/posts/ai-perception/index.html#full-report",
+    "title": "AI Perception: Quantitative Survey Analysis",
+    "section": "Full Report",
+    "text": "Full Report"
+  },
+  {
+    "objectID": "projects/posts/nfl-scouting/index.html",
+    "href": "projects/posts/nfl-scouting/index.html",
+    "title": "NFL Scouting Report: Patriots vs Rams",
+    "section": "",
+    "text": "Comparative scouting analysis of the New England Patriots and Los Angeles Rams using NFL play-by-play data, built entirely in R."
+  },
+  {
+    "objectID": "projects/posts/nfl-scouting/index.html#overview",
+    "href": "projects/posts/nfl-scouting/index.html#overview",
+    "title": "NFL Scouting Report: Patriots vs Rams",
+    "section": "",
+    "text": "Comparative scouting analysis of the New England Patriots and Los Angeles Rams using NFL play-by-play data, built entirely in R."
+  },
+  {
+    "objectID": "projects/posts/nfl-scouting/index.html#metrics-analyzed",
+    "href": "projects/posts/nfl-scouting/index.html#metrics-analyzed",
+    "title": "NFL Scouting Report: Patriots vs Rams",
+    "section": "Metrics Analyzed",
+    "text": "Metrics Analyzed\n\nPass/run rate splits\nSnaps from shotgun vs under center\n4th down conversion tendencies\nGoal-to-go situational analysis"
+  },
+  {
+    "objectID": "projects/posts/nfl-scouting/index.html#tools-packages-used",
+    "href": "projects/posts/nfl-scouting/index.html#tools-packages-used",
+    "title": "NFL Scouting Report: Patriots vs Rams",
+    "section": "Tools / Packages Used",
+    "text": "Tools / Packages Used\n\nnflreadr\ntidyverse\nggplot2\nflextable\npatchwork\n\nFull analysis and visualizations coming soon."
+  },
+  {
+    "objectID": "projects/posts/ai-discourse/index.html",
+    "href": "projects/posts/ai-discourse/index.html",
+    "title": "AI Discourse on Social Media",
+    "section": "",
+    "text": "Analysis of AI-related discourse across subreddits"
+  },
+  {
+    "objectID": "projects/posts/ai-discourse/index.html#overview",
+    "href": "projects/posts/ai-discourse/index.html#overview",
+    "title": "AI Discourse on Social Media",
+    "section": "",
+    "text": "Analysis of AI-related discourse across subreddits"
+  },
+  {
+    "objectID": "projects/posts/ai-discourse/index.html#interactive-experience",
+    "href": "projects/posts/ai-discourse/index.html#interactive-experience",
+    "title": "AI Discourse on Social Media",
+    "section": "Interactive Experience",
+    "text": "Interactive Experience"
+  },
+  {
+    "objectID": "projects/posts/ai-discourse/index.html#tools-packages-used",
+    "href": "projects/posts/ai-discourse/index.html#tools-packages-used",
+    "title": "AI Discourse on Social Media",
+    "section": "Tools / Packages Used",
+    "text": "Tools / Packages Used\n\nQuarto\nR\nGenially\nOllama\nDeepseek LLM\nQuanteda\nInfranodus\nigraph\nvisNetwork\nNano Banana\nEllmer"
+  },
+  {
+    "objectID": "projects/posts/worldcup2022-argentina/index.html",
+    "href": "projects/posts/worldcup2022-argentina/index.html",
+    "title": "World Cup 2022 Microsite",
+    "section": "",
+    "text": "An interactive microsite exploring Argentina’s progress and triump at the 2022 FIFA World Cup — A data driven storytelling"
+  },
+  {
+    "objectID": "projects/posts/worldcup2022-argentina/index.html#overview",
+    "href": "projects/posts/worldcup2022-argentina/index.html#overview",
+    "title": "World Cup 2022 Microsite",
+    "section": "",
+    "text": "An interactive microsite exploring Argentina’s progress and triump at the 2022 FIFA World Cup — A data driven storytelling"
+  },
+  {
+    "objectID": "projects/posts/worldcup2022-argentina/index.html#interactive-experience",
+    "href": "projects/posts/worldcup2022-argentina/index.html#interactive-experience",
+    "title": "World Cup 2022 Microsite",
+    "section": "Interactive Experience",
+    "text": "Interactive Experience"
+  },
+  {
+    "objectID": "projects/posts/worldcup2022-argentina/index.html#tools-packages-used",
+    "href": "projects/posts/worldcup2022-argentina/index.html#tools-packages-used",
+    "title": "World Cup 2022 Microsite",
+    "section": "Tools / Packages Used",
+    "text": "Tools / Packages Used\n\nGenially\nR\nStatsBombR\nggsoccer\ntidyverse\nvroom\nggplot2\nggrepel\nigraph\ngggraph"
+  },
+  {
+    "objectID": "projects/index.html",
+    "href": "projects/index.html",
     "title": "Projects",
     "section": "",
-    "text": "No matching items"
+    "text": "World Cup 2022 Microsite\n\n\n\nR\n\nSports Analytics\n\nSoccer\n\nWorld Cup\n\n\n\nInteractive microsite exploring the 2022 FIFA World Cup data, built with DuckDB and Quarto.\n\n\n\nMay 10, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nNFL Scouting Report: Patriots vs Rams\n\n\n\nR\n\nNFL\n\nSports Analytics\n\nggplot2\n\n\n\nR based analysis of offensive tendencies comparing the New England Patriots and Los Angeles Rams.\n\n\n\nJan 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nAI Discourse on Social Media\n\n\n\nAI\n\nSocial Media\n\nText Analysis\n\n\n\nAnalysis of left & right leaning individuals perception of AI regulation and safety on Reddit\n\n\n\nNov 28, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nAI Perception: Quantitative Survey Analysis\n\n\n\nR\n\nSurvey Analysis\n\nQuantitative\n\n\n\nQuantitative analysis of survey data measuring public perception and attitudes toward artificial intelligence.\n\n\n\nMay 12, 2025\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "blog/posts/soccer-analytics/index.html",
