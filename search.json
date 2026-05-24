@@ -53,14 +53,14 @@
     "href": "projects/posts/nfl-scouting/index.html",
     "title": "NFL Scouting Report: Patriots vs Rams",
     "section": "",
-    "text": "Comparative scouting analysis of the New England Patriots and Los Angeles Rams using NFL play-by-play data, built entirely in R."
+    "text": "Comparative scouting analysis of the New England Patriots and Los Angeles Rams using NFL play-by-play data, built entirely in R and Quarto."
   },
   {
     "objectID": "projects/posts/nfl-scouting/index.html#overview",
     "href": "projects/posts/nfl-scouting/index.html#overview",
     "title": "NFL Scouting Report: Patriots vs Rams",
     "section": "",
-    "text": "Comparative scouting analysis of the New England Patriots and Los Angeles Rams using NFL play-by-play data, built entirely in R."
+    "text": "Comparative scouting analysis of the New England Patriots and Los Angeles Rams using NFL play-by-play data, built entirely in R and Quarto."
   },
   {
     "objectID": "projects/posts/nfl-scouting/index.html#metrics-analyzed",
@@ -137,7 +137,7 @@
     "href": "projects/index.html",
     "title": "Projects",
     "section": "",
-    "text": "World Cup 2022 Microsite\n\n\n\nR\n\nSports Analytics\n\nSoccer\n\nWorld Cup\n\n\n\nInteractive microsite exploring the 2022 FIFA World Cup data, built with DuckDB and Quarto.\n\n\n\nMay 10, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nNFL Scouting Report: Patriots vs Rams\n\n\n\nR\n\nNFL\n\nSports Analytics\n\nggplot2\n\n\n\nR based analysis of offensive tendencies comparing the New England Patriots and Los Angeles Rams.\n\n\n\nJan 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nAI Discourse on Social Media\n\n\n\nAI\n\nSocial Media\n\nText Analysis\n\n\n\nAnalysis of left & right leaning individuals perception of AI regulation and safety on Reddit\n\n\n\nNov 28, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nAI Perception: Quantitative Survey Analysis\n\n\n\nR\n\nSurvey Analysis\n\nQuantitative\n\n\n\nQuantitative analysis of survey data measuring public perception and attitudes toward artificial intelligence.\n\n\n\nMay 12, 2025\n\n\n\n\n\n\nNo matching items"
+    "text": "World Cup 2022 Microsite\n\n\n\nR\n\nSports Analytics\n\nSoccer\n\nWorld Cup\n\n\n\nInteractive microsite exploring the 2022 FIFA World Cup data, built with R, Genially and DuckDB.\n\n\n\nMay 10, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nNFL Scouting Report: Patriots vs Rams\n\n\n\nR\n\nNFL\n\nSports Analytics\n\nggplot2\n\n\n\nR based analysis of offensive tendencies comparing the New England Patriots and Los Angeles Rams.\n\n\n\nJan 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nAI Discourse on Social Media\n\n\n\nAI\n\nSocial Media\n\nText Analysis\n\n\n\nAnalysis of left & right leaning individuals perception of AI regulation and safety on Reddit\n\n\n\nNov 28, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nAI Perception: Quantitative Survey Analysis\n\n\n\nR\n\nSurvey Analysis\n\nQuantitative\n\n\n\nQuantitative analysis of survey data measuring public perception and attitudes toward artificial intelligence.\n\n\n\nMay 12, 2025\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "blog/posts/soccer-analytics/index.html",
