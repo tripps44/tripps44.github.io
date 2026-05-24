@@ -1,6 +1,6 @@
 ---
 title: "World Cup 2022 Microsite"
-description: "Interactive microsite exploring the 2022 FIFA World Cup data, built with DuckDB and Quarto."
+description: "Interactive microsite exploring the 2022 FIFA World Cup data, built with R, Genially and DuckDB."
 date: "2026-05-10"
 categories: [R, Sports Analytics, Soccer, World Cup]
 image: thumbnail.png
