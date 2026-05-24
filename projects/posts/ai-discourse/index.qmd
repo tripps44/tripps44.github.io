@@ -1,0 +1,32 @@
+---
+title: "AI Discourse on Social Media"
+description: "Analysis of left & right leaning individuals perception of AI regulation and safety on Reddit"
+date: "2025-11-28"
+categories: [AI, Social Media, Text Analysis]
+image: thumbnail.png
+---
+
+## Overview
+Analysis of AI-related discourse across subreddits
+
+## Interactive Experience
+
+<iframe src="https://view.genially.com/69336a878353a558d3bb2709" 
+  width="100%" 
+  height="600px" 
+  frameborder="0" 
+  allowfullscreen>
+</iframe>
+
+## Tools / Packages Used
+- Quarto
+- R
+- Genially
+- Ollama
+- Deepseek LLM
+- Quanteda
+- Infranodus
+- igraph
+- visNetwork
+- Nano Banana 
+- Ellmer

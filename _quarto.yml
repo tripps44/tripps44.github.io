@@ -7,7 +7,7 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - href: projects.qmd
+      - href: projects/index.qmd
         text: Projects
       - href: blog/index.qmd
         text: Blog
@@ -32,6 +32,7 @@ format:
 
 execute:
   freeze: auto
+  python: python3
 
 
 

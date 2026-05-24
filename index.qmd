@@ -12,9 +12,6 @@ about:
     - icon: linkedin
       text: LinkedIn
       href: https://linkedin.com/in/ashtripathiboston
-    - icon: envelope
-      text: Email
-      href: mailto:tripps44@gmail.com
 ---
 
 ## About Me

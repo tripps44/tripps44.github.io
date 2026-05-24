@@ -1,0 +1,32 @@
+---
+title: "World Cup 2022 Microsite"
+description: "Interactive microsite exploring the 2022 FIFA World Cup data, built with DuckDB and Quarto."
+date: "2026-05-10"
+categories: [R, Sports Analytics, Soccer, World Cup]
+image: thumbnail.png
+---
+
+## Overview
+An interactive microsite exploring Argentina's progress and triump at the 2022 FIFA World Cup — 
+A data driven storytelling
+
+## Interactive Experience
+
+<iframe src="https://view.genially.com/69f6114ba1fba34f66f50d09" 
+  width="100%" 
+  height="600px" 
+  frameborder="0" 
+  allowfullscreen>
+</iframe>
+
+## Tools / Packages Used
+- Genially
+- R
+- StatsBombR
+- ggsoccer
+- tidyverse
+- vroom
+- ggplot2
+- ggrepel
+- igraph
+- gggraph

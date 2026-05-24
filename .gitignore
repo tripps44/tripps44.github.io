@@ -57,4 +57,14 @@ __pycache__/
 
 /.quarto/
 **/*.quarto_ipynb
+
+# Quarto temp files
+*.quarto_ipynb
+*.quarto_ipynb_*
+
+# DuckDB files
 *.duckdb
+
+# Quarto build
+_site/
+.quarto/

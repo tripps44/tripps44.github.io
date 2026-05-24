@@ -1,0 +1,26 @@
+---
+title: "NFL Scouting Report: Patriots vs Rams"
+description: "R based analysis of offensive tendencies comparing the New England Patriots and Los Angeles Rams."
+date: "2026-01-19"
+categories: [R, NFL, Sports Analytics, ggplot2]
+image: thumbnail.png
+---
+
+## Overview
+Comparative scouting analysis of the New England Patriots and 
+Los Angeles Rams using NFL play-by-play data, built entirely in R.
+
+## Metrics Analyzed
+- Pass/run rate splits
+- Snaps from shotgun vs under center
+- 4th down conversion tendencies
+- Goal-to-go situational analysis
+
+## Tools / Packages Used
+- nflreadr
+- tidyverse
+- ggplot2
+- flextable
+- patchwork
+
+*Full analysis and visualizations coming soon.*

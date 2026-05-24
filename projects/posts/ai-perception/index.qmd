@@ -1,0 +1,21 @@
+---
+title: "AI Perception: Quantitative Survey Analysis"
+description: "Quantitative analysis of survey data measuring public perception and attitudes toward artificial intelligence."
+date: "2025-05-12"
+categories: [R, Survey Analysis, Quantitative]
+image: thumbnail.png
+---
+
+## Overview
+This study investigates whether the frequency of interaction with artificial intelligence influences individuals’ perceptions of AI. Specifically,
+it examines whether regular AI exposure correlates with more positive or neutral or negative concerns.
+
+## Full Report
+
+```{=html}
+<iframe src="paper.pdf" 
+  width="100%" 
+  height="800px">
+</iframe>
+```
+
