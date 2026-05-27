@@ -1,0 +1,208 @@
+---
+title: "Visualizing Soccer Data"
+description: "Exploring Argentina vs. Saudi Arabia match via Data viz using Python "
+date: "2026-05-25"
+categories: [Python, EDA, Soccer, Data, Visualization, StatsBomb]
+format:
+  html:
+    code-fold: true    
+    code-tools: true
+jupyter: python3
+---
+
+## Overview
+
+I had used R, ggplot2, ggsoccer and other R packages to build visualizations for my <a href = 
+"https://tripps44.github.io/projects/posts/worldcup2022-argentina/" target="_blank"> 2022 world cup microsite showcasing Argentina's progress </a>
+In this blog post, I'm using Python to explore building a few different set of visualizations for the Argentina vs. Saudi Arabia game
+
+## Tools Used
+
+- **Languages:** Python
+- **IDE:** Positron
+- **Packages:** quarto, pandas, numpy, mplsoccer
+
+## Python Imports
+
+```{python}
+
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+from mplsoccer import Pitch, VerticalPitch, Sbopen 
+import pandas as pd
+import numpy as np
+
+
+
+```
+
+## Finding the match id's for Argentina's games
+```{python}
+# https://mplsoccer.readthedocs.io/en/latest/gallery/statsbomb/plot_statsbomb_data.html#match-data
+parser = Sbopen()
+
+# 2022 World Cup
+matches = parser.match(competition_id=43, season_id=106)
+
+TEAM = "Argentina"
+
+team_matches = matches[
+    (matches['home_team_name'] == TEAM) | 
+    (matches['away_team_name'] == TEAM)
+]
+
+print(team_matches[['match_id', 'home_team_name', 
+                     'away_team_name', 'match_date']].to_string())
+```
+Match id 3857300 is for the specific game: Argentina vs Saudi Arabia
+
+## Loading the dataframes
+```{python}
+# Load match events
+# https://mplsoccer.readthedocs.io/en/latest/gallery/statsbomb/plot_statsbomb_data.html#event-data
+
+events, related, freeze, tactics = parser.event(3857300)
+
+# Argentina passes
+arg_passes = events[
+    (events['type_name'] == 'Pass') & 
+    (events['team_name'] == 'Argentina')
+]
+
+# Saudi Arabia passes
+ksa_passes = events[
+    (events['type_name'] == 'Pass') & 
+    (events['team_name'] == 'Saudi Arabia')
+]
+
+# Argentina shots
+arg_shots = events[
+    (events['type_name'] == 'Shot') & 
+    (events['sub_type_name'] !='Penalty') &
+    (events['team_name'] == 'Argentina')
+]
+
+# Saudi Arabia shots
+ksa_shots = events[
+    (events['type_name'] == 'Shot') & 
+    (events['sub_type_name'] !='Penalty') &
+    (events['team_name'] == 'Saudi Arabia')
+]
+
+print(f"Argentina passes: {len(arg_passes)}, shots: {len(arg_shots)}")
+print(f"Saudi Arabia passes: {len(ksa_passes)}, shots: {len(ksa_shots)}")
+print("* excluding penalties")
+```
+
+
+## Function setup 
+```{python}
+def get_pre_shot_passes(passes_df, shots_df):
+    """Get passes made within 15 seconds of a shot"""
+
+    pre_shot = [] # empty list to collect results
+
+    for _, shot in shots_df.iterrows():
+        #looping through every shot one at a time
+
+        shot_time = shot['minute'] * 60 + shot['second']
+        # converting shot time to total seconds
+
+        window = passes_df[
+            (passes_df['minute'] * 60 + passes_df['second'])
+            .between(shot_time - 15, shot_time)
+        
+        #convert every pass time to total seconds
+        # then find passes that happened within the 15 second window BEFORE the shot
+        ]
+        pre_shot.append(window)
+        # add to results list
+
+    return pd.concat(pre_shot).drop_duplicates() if pre_shot else pd.DataFrame()
+        # combine all results
+        # remove duplicates
+        # return empty dataframe if nothing is found 
+
+arg_pre_shot = get_pre_shot_passes(arg_passes, arg_shots)
+ksa_pre_shot = get_pre_shot_passes(ksa_passes, ksa_shots)
+
+
+```
+
+## 1. Pass Map Viz - Buildup to the Shot
+
+```{python}
+fig, axes = plt.subplots(2, 1, figsize=(16, 8))
+fig.patch.set_facecolor('#ffffff')
+fig.suptitle('Pass Buildup to Shot (Within 15 Seconds)',
+             color='black', fontsize=14, y=1.02)
+
+for ax, passes_df, team, color in zip(
+    axes,
+    [arg_pre_shot, ksa_pre_shot],
+    ["Argentina", "Saudi Arabia"],
+    ['#75AADB', '#00b100']
+):
+    pitch = Pitch(
+        pitch_type='statsbomb',
+        pitch_color='#fafafa',
+        line_color='#cccccc',
+        line_zorder=2
+    )
+    pitch.draw(ax=ax)
+
+    # complete passes
+    complete = passes_df[passes_df['outcome_name'].isna()]
+    if not complete.empty:
+        pitch.arrows(
+            complete.x, complete.y,
+            complete.end_x, complete.end_y,
+            ax=ax,
+            color=color,
+            width=2,
+            headwidth=4,
+            alpha=0.8,
+            label='Complete'
+        )
+
+    # incomplete passes
+    incomplete = passes_df[passes_df['outcome_name'].notna()]
+    if not incomplete.empty:
+        pitch.arrows(
+            incomplete.x, incomplete.y,
+            incomplete.end_x, incomplete.end_y,
+            ax=ax,
+            color='#333333',
+            width=1.5,
+            headwidth=3,
+            alpha=0.5,
+            label='Incomplete'
+        )
+
+    ax.set_title(team, color='black', fontsize=13, pad=10)
+    ax.legend(facecolor='#fafafa', labelcolor='#333333',
+              loc='upper left', fontsize=8)
+
+plt.tight_layout()
+plt.savefig('images/pass_map.png', dpi=150,
+            bbox_inches='tight', facecolor='#fafafa')
+plt.show()
+```
+
+🟦 Argentina Takeaways
+
+    1. The high volume of passes show that Argentina dominated possession
+    2. Short and quick arrows are clustered together meaning 
+    a lot of tight passing was carried out
+    3. Argentina controlled the ball and recycled possession heavily in the opponent's half 
+    creating a sustained attacking pressure
+
+🟩 Saudi Takeways
+
+    1. Saudi Arabia sat deeper, played fewer passes and relied on direct balls when they 
+    played forward
+
+```{python}
+
+
+```
