@@ -40,3 +40,33 @@ a {
 a:hover {
   color: #095e61 !important;
   text-decoration: underline;
+}
+
+/* Safer fix for horizontal scroll */
+html {
+  overflow-x: hidden;
+}
+
+.page-columns,
+.page-layout-full {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Images never overflow */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Code blocks scroll independently */
+pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Plotly charts scale to container */
+iframe {
+  max-width: 100% !important;
+  width: 100% !important;
+}
