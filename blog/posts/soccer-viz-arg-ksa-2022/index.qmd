@@ -132,10 +132,10 @@ ksa_pre_shot = get_pre_shot_passes(ksa_passes, ksa_shots)
 ## 1. Pass Map Viz - Buildup to the Shot
 
 ```{python}
-fig, axes = plt.subplots(2, 1, figsize=(16, 8))
+fig, axes = plt.subplots(1, 2, figsize=(16, 8))
 fig.patch.set_facecolor('#ffffff')
 fig.suptitle('Pass Buildup to Shot (Within 15 Seconds)',
-             color='black', fontsize=14, y=1.02)
+             color='black', fontsize=22, y=1.04, fontweight = 'bold')
 
 for ax, passes_df, team, color in zip(
     axes,
@@ -172,22 +172,32 @@ for ax, passes_df, team, color in zip(
             incomplete.x, incomplete.y,
             incomplete.end_x, incomplete.end_y,
             ax=ax,
-            color='#333333',
+            color='#000000',
             width=1.5,
             headwidth=3,
-            alpha=0.5,
+            alpha=0.9,
             label='Incomplete'
         )
 
     ax.set_title(team, color='black', fontsize=13, pad=10)
-    ax.legend(facecolor='#fafafa', labelcolor='#333333',
-              loc='upper left', fontsize=8)
+    ax.legend(facecolor='#fafafa', labelcolor='black',
+              loc='upper left', fontsize=13,
+              markerscale=1.5,
+              framealpha=0.8
+              )
 
 plt.tight_layout()
 plt.savefig('images/pass_map.png', dpi=150,
             bbox_inches='tight', facecolor='#fafafa')
 plt.show()
 ```
+Why Track passes 15 seconds before a shot?
+
+This type of tracking reveals the precise off ball movements, spacing and
+defensive fractures that create scoring opportunities, rather than just 
+analyzing the final action. If the coach only looks at shots, then they're
+reacting only to the outcome. Looking at passes 15 seconds before a shot 
+can give an idea of spatial patterns before looking at the shot map
 
 🟦 Argentina Takeaways
 
@@ -202,7 +212,78 @@ plt.show()
     1. Saudi Arabia sat deeper, played fewer passes and relied on direct balls when they 
     played forward
 
+## Shot Map
+
+
 ```{python}
+fig, axes = plt.subplots(1, 2, figsize=(16, 10))
+fig.patch.set_facecolor('#ffffff')
+fig.suptitle('Shot Map',
+             color='black', fontsize=22, y=1.04, fontweight = 'bold')
 
+# subtitle
+fig.text(0.5, 1.00,
+    'Circle size proportional to xG value',
+    color='#aaaaaa', fontsize=13,
+    ha='center', va='top')
 
+for ax, shots_df, team, color in zip(
+    axes,
+    [arg_shots, ksa_shots],
+    ["Argentina", "Saudi Arabia"],
+    ['#75AADB', '#00b100']
+):
+    pitch = Pitch(
+        pitch_type='statsbomb',
+        pitch_color='#fafafa',
+        line_color='#cccccc',
+        half=True
+    )
+    pitch.draw(ax=ax)
+
+    # Goals
+    goals = shots_df[shots_df['outcome_name'] == 'Goal']
+    if not goals.empty:
+        pitch.scatter(
+            goals.x, goals.y,
+            s=goals.shot_statsbomb_xg * 1000,
+            c='#9b00b1',
+            edgecolors='white',
+            linewidth=0.8,
+            ax=ax,
+            zorder=3,
+            label='Goal'
+        )
+
+    # Non goals
+    non_goals = shots_df[shots_df['outcome_name'] != 'Goal']
+    if not non_goals.empty:
+        pitch.scatter(
+            non_goals.x, non_goals.y,
+            s=non_goals.shot_statsbomb_xg * 1000,
+            c=color,
+            edgecolors='white',
+            linewidth=0.8,
+            alpha=0.6,
+            ax=ax,
+            zorder=2,
+            label='No Goal'
+        )
+    
+
+    ax.set_title(team, color='black', fontsize=13, pad=10)
+    ax.legend(facecolor='#fafafa', labelcolor='black',
+              loc='upper left', fontsize=13,
+              markerscale=1.5,
+              framealpha=0.8
+              )
+
+plt.tight_layout()
+plt.savefig('images/shot_map.png', dpi=150,
+            bbox_inches='tight', facecolor='#fafafa')
+plt.show()
 ```
+
+Argentina dominated territorially with 14 shots but Saudi Arabia's 
+disciplined defensive block restricted clear chances. 
+Saudi Arabia took 3 shots to score twice 
