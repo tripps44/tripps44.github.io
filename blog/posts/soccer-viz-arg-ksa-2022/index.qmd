@@ -20,7 +20,7 @@ In this blog post, I'm using Python to explore building a few different set of v
 
 - **Languages:** Python
 - **IDE:** Positron
-- **Packages:** quarto, pandas, numpy, mplsoccer
+- **Packages:** quarto, pandas, numpy, mplsoccer, adjustText
 
 ## Python Imports
 
@@ -201,15 +201,14 @@ can give an idea of spatial patterns before looking at the shot map
 
 🟦 Argentina Takeaways
 
-    1. The high volume of passes show that Argentina dominated possession
-    2. Short and quick arrows are clustered together meaning a lot of tight passing was carried out
-    3. Argentina controlled the ball and recycled possession heavily in the opponent's half 
-    creating a sustained attacking pressure
+1. The high volume of passes show that Argentina dominated possession
+2. Short and quick arrows are clustered together meaning a lot of tight passing was carried out
+3. Argentina controlled the ball and recycled possession heavily in the opponent's half 
+creating a sustained attacking pressure
 
 🟩 Saudi Takeways
 
-    1. Saudi Arabia sat deeper, played fewer passes and relied on direct balls when they 
-    played forward
+Saudi Arabia sat deeper, played fewer passes and relied on direct balls when they played forward
 
 ## 2. Shot Map
 
