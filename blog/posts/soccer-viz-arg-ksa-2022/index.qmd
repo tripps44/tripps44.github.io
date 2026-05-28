@@ -31,7 +31,7 @@ import matplotlib.patches as mpatches
 from mplsoccer import Pitch, VerticalPitch, Sbopen 
 import pandas as pd
 import numpy as np
-
+from adjustText import adjust_text
 
 
 ```
@@ -202,8 +202,7 @@ can give an idea of spatial patterns before looking at the shot map
 🟦 Argentina Takeaways
 
     1. The high volume of passes show that Argentina dominated possession
-    2. Short and quick arrows are clustered together meaning 
-    a lot of tight passing was carried out
+    2. Short and quick arrows are clustered together meaning a lot of tight passing was carried out
     3. Argentina controlled the ball and recycled possession heavily in the opponent's half 
     creating a sustained attacking pressure
 
@@ -212,19 +211,18 @@ can give an idea of spatial patterns before looking at the shot map
     1. Saudi Arabia sat deeper, played fewer passes and relied on direct balls when they 
     played forward
 
-## Shot Map
-
+## 2. Shot Map
 
 ```{python}
-fig, axes = plt.subplots(1, 2, figsize=(16, 10))
+fig, axes = plt.subplots(1,2,  figsize=(16, 8))
 fig.patch.set_facecolor('#ffffff')
 fig.suptitle('Shot Map',
-             color='black', fontsize=22, y=1.04, fontweight = 'bold')
+             color='black', fontsize=22, y=1.05, fontweight = 'bold')
 
 # subtitle
 fig.text(0.5, 1.00,
     'Circle size proportional to xG value',
-    color='#aaaaaa', fontsize=13,
+    color='#aaaaaa', fontsize=11,
     ha='center', va='top')
 
 for ax, shots_df, team, color in zip(
@@ -284,6 +282,172 @@ plt.savefig('images/shot_map.png', dpi=150,
 plt.show()
 ```
 
-Argentina dominated territorially with 14 shots but Saudi Arabia's 
+Argentina dominated territorially with 14 shots (excluding the 1 penalty taken by Messi) but Saudi Arabia's 
 disciplined defensive block restricted clear chances. 
+
 Saudi Arabia took 3 shots to score twice 
+
+
+## 3. Passing Networks
+
+
+```{python}
+# Argentina top 5
+arg_top5 = arg_passes[
+    arg_passes['outcome_name'].isna()
+].groupby('player_name').size()\
+ .reset_index(name='total_passes')\
+ .sort_values('total_passes', ascending=False)\
+ .head(5)
+
+print("Argentina Top 5:")
+print(arg_top5.to_string())
+
+# Saudi Arabia top 5
+ksa_top5 = ksa_passes[
+    ksa_passes['outcome_name'].isna()
+].groupby('player_name').size()\
+ .reset_index(name='total_passes')\
+ .sort_values('total_passes', ascending=False)\
+ .head(5)
+
+print("\nSaudi Arabia Top 5:")
+print(ksa_top5.to_string())
+```
+
+```{python}
+def draw_passing_network(ax, passes_df, team, color, top5):
+    """Passing network for top 5 players"""
+    
+    # passes between top 5 players only
+    complete = passes_df[
+        passes_df['outcome_name'].isna() &
+        passes_df['pass_recipient_name'].notna() &
+        passes_df['player_name'].isin(top5) &
+        passes_df['pass_recipient_name'].isin(top5)
+    ]
+
+    # pass pairs
+    pairs = complete.groupby(
+        ['player_name', 'pass_recipient_name']
+    ).size().reset_index(name='pass_count')
+
+    # average positions
+    avg_pos = complete.groupby('player_name').agg(
+        avg_x=('x', 'mean'),
+        avg_y=('y', 'mean'),
+        total=('x', 'count')
+    ).reset_index()
+
+    pitch = Pitch(
+        pitch_type='statsbomb',
+        pitch_color='#fafafa',
+        line_color='#cccccc'
+    )
+    pitch.draw(ax=ax)
+
+    # draw lines
+    for _, row in pairs.iterrows():
+        p1 = avg_pos[avg_pos['player_name'] == row['player_name']]
+        p2 = avg_pos[avg_pos['player_name'] == row['pass_recipient_name']]
+        if not p1.empty and not p2.empty:
+            pitch.lines(
+                p1.avg_x.values[0], p1.avg_y.values[0],
+                p2.avg_x.values[0], p2.avg_y.values[0],
+                ax=ax,
+                lw=row['pass_count'] * 0.4,
+                color=color,
+                alpha=0.5,
+                zorder=1
+            )
+
+    # draw nodes
+    pitch.scatter(
+        avg_pos.avg_x, avg_pos.avg_y,
+        s=avg_pos.total * 8,
+        c=color,
+        edgecolors='white',
+        linewidth=1,
+        ax=ax,
+        zorder=3
+    )
+
+    # Labels — last name only
+    texts = []
+    for _, row in avg_pos.iterrows():
+        last_name = row['player_name'].split()[-1]
+        txt = ax.text(
+            row['avg_x'], row['avg_y'],
+            last_name,
+            color='black',
+            fontsize=10,
+            fontweight='bold',
+            ha='center',
+            va='bottom',
+            zorder=5
+        )
+        texts.append(txt)
+
+    # adjustText: avoids label overlap
+    # similar to ggrepel 
+    adjust_text(
+        texts,
+        ax=ax,
+        expand=(1.2, 1.4),
+        arrowprops=dict(
+            arrowstyle='-',
+            color='#999999',
+            lw=0.5
+        )
+    )
+
+    ax.set_title(team, color='black',
+                 fontsize=12, pad=12)
+    return ax
+
+
+# top 5 player lists
+arg_top5_list = arg_top5['player_name'].tolist()
+ksa_top5_list = ksa_top5['player_name'].tolist()
+
+fig, axes = plt.subplots(2, 1, figsize=(16, 8))
+fig.patch.set_facecolor('#fafafa')
+fig.suptitle('Top 5 Passers',
+             color='black', fontsize=22,
+             fontweight='bold', y=1.04)
+fig.text(
+    0.5, 1.00,
+    'Node size = total passes \n Line width = pass frequency',
+    color='#666666', fontsize=10,
+    fontstyle='italic', ha='center', va='top'
+)
+
+for ax, passes_df, team, color, top5 in zip(
+    axes,
+    [arg_passes, ksa_passes],
+    ["Argentina", "Saudi Arabia"],
+    ['#75AADB', '#00b100'],
+    [arg_top5_list, ksa_top5_list]   
+):
+    draw_passing_network(ax, passes_df, team, color, top5)
+
+plt.tight_layout()
+plt.savefig('images/passing_network.png', dpi=150,
+            bbox_inches='tight', facecolor='#fafafa')
+plt.show()
+
+```
+
+Argentina's top 5 passers were almost entirely confined to their 
+own defensive third, a striking visual that tells the story of 
+Saudi Arabia's relentless high press. Otamendi and Romero, both 
+center backs, were forced into heavy ball circulation at the back, 
+with Paredes and De Paul dropping deep to offer passing options 
+rather than driving forward. The tightly clustered network suggests 
+Argentina struggled to progress the ball through midfield and build 
+attacks from deep (an unusual sight for a team of their quality)
+
+Saudi Arabia's network tells the opposite story. Their top 5 passers 
+operated across a wider area of the pitch, with Owais distributing 
+from deep while Al-Malki, Kanoo and Hamid formed an active midfield 
+triangle in the center of the pitch
