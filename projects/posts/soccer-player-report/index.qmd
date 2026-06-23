@@ -1,0 +1,21 @@
+---
+title: "FIFA 2022 Soccer Player Analysis "
+description: "French Player Antoine Griezmann creating high value chances in the tournament"
+date: "2026-06-11"
+categories: [Python, Soccer, Analytics]
+image: thumbnail.png
+---
+
+## Overview
+This data driven report shows how Antoine Griezmann was the single most productive chance creator 
+among the 44 players in his role at the tournament
+
+## Full Report
+
+```{=html}
+<iframe src="FIFA 2022 Player Analysis (Griezmann) by Ash Tripathi.pdf" 
+  width="100%" 
+  height="800px">
+</iframe>
+```
+
