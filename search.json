@@ -95,7 +95,7 @@
     "href": "projects/index.html",
     "title": "Projects",
     "section": "",
-    "text": "World Cup 2022 Microsite\n\n\n\nR\n\nSports Analytics\n\nSoccer\n\nWorld Cup\n\n\n\nInteractive microsite exploring the 2022 FIFA World Cup data, built with R, Genially and DuckDB.\n\n\n\nMay 10, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nNFL Scouting Report: Patriots vs Rams\n\n\n\nR\n\nNFL\n\nSports Analytics\n\nggplot2\n\n\n\nR based analysis of offensive tendencies comparing the New England Patriots and Los Angeles Rams.\n\n\n\nJan 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nAI Discourse on Social Media\n\n\n\nAI\n\nSocial Media\n\nText Analysis\n\n\n\nAnalysis of left & right leaning individuals perception of AI regulation and safety on Reddit\n\n\n\nNov 28, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nAI Perception: Quantitative Survey Analysis\n\n\n\nR\n\nSurvey Analysis\n\nQuantitative\n\n\n\nQuantitative analysis of survey data measuring public perception and attitudes toward artificial intelligence.\n\n\n\nMay 12, 2025\n\n\n\n\n\n\nNo matching items"
+    "text": "FIFA 2022 Soccer Player Analysis\n\n\n\nPython\n\nSoccer\n\nAnalytics\n\n\n\nFrench Player Antoine Griezmann creating high value chances in the tournament\n\n\n\nJun 11, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nWorld Cup 2022 Microsite\n\n\n\nR\n\nSports Analytics\n\nSoccer\n\nWorld Cup\n\n\n\nInteractive microsite exploring the 2022 FIFA World Cup data, built with R, Genially and DuckDB.\n\n\n\nMay 10, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nNFL Scouting Report: Patriots vs Rams\n\n\n\nR\n\nNFL\n\nSports Analytics\n\nggplot2\n\n\n\nR based analysis of offensive tendencies comparing the New England Patriots and Los Angeles Rams.\n\n\n\nJan 19, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nAI Discourse on Social Media\n\n\n\nAI\n\nSocial Media\n\nText Analysis\n\n\n\nAnalysis of left & right leaning individuals perception of AI regulation and safety on Reddit\n\n\n\nNov 28, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nAI Perception: Quantitative Survey Analysis\n\n\n\nR\n\nSurvey Analysis\n\nQuantitative\n\n\n\nQuantitative analysis of survey data measuring public perception and attitudes toward artificial intelligence.\n\n\n\nMay 12, 2025\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "projects/posts/worldcup2022-argentina/index.html",
@@ -124,34 +124,6 @@
     "title": "World Cup 2022 Microsite",
     "section": "Tools / Packages Used",
     "text": "Tools / Packages Used\n\nGenially\nR\nStatsBombR\nggsoccer\ntidyverse\nvroom\nggplot2\nggrepel\nigraph\ngggraph"
-  },
-  {
-    "objectID": "projects/posts/ai-discourse/index.html",
-    "href": "projects/posts/ai-discourse/index.html",
-    "title": "AI Discourse on Social Media",
-    "section": "",
-    "text": "Analysis of AI-related discourse across subreddits"
-  },
-  {
-    "objectID": "projects/posts/ai-discourse/index.html#overview",
-    "href": "projects/posts/ai-discourse/index.html#overview",
-    "title": "AI Discourse on Social Media",
-    "section": "",
-    "text": "Analysis of AI-related discourse across subreddits"
-  },
-  {
-    "objectID": "projects/posts/ai-discourse/index.html#interactive-experience",
-    "href": "projects/posts/ai-discourse/index.html#interactive-experience",
-    "title": "AI Discourse on Social Media",
-    "section": "Interactive Experience",
-    "text": "Interactive Experience"
-  },
-  {
-    "objectID": "projects/posts/ai-discourse/index.html#tools-packages-used",
-    "href": "projects/posts/ai-discourse/index.html#tools-packages-used",
-    "title": "AI Discourse on Social Media",
-    "section": "Tools / Packages Used",
-    "text": "Tools / Packages Used\n\nQuarto\nR\nGenially\nOllama\nDeepseek LLM\nQuanteda\nInfranodus\nigraph\nvisNetwork\nNano Banana\nEllmer"
   },
   {
     "objectID": "projects/posts/nfl-scouting/index.html",
@@ -201,6 +173,55 @@
     "title": "NFL Scouting Report: Patriots vs Rams",
     "section": "1.4 Goal to go",
     "text": "1.4 Goal to go\n\n\nCode\nrate_all.gtg &lt;- pbp |&gt; \n  filter(\n    down %in% 1:3,\n\n    pass_attempt %in% c(0,1) | rush_attempt %in% c(0,1),\n    goal_to_go==1\n  ) |&gt; \n  group_by(down, to_go_f) |&gt; \n  summarise(\n    pass_percent = mean(pass_attempt, na.rm = TRUE),\n    pass_att = sum(pass_attempt, na.rm = TRUE),\n    plays = n(),\n    .groups = \"drop\"\n  )\n\nrate_all.gtg.plot &lt;- ggplot(rate_all.gtg, aes(x = to_go_f, y = factor(down), fill = pass_percent)) +\n  geom_tile(color = \"white\") +\n  geom_text(\n    aes(label = paste0(\n      scales::percent(pass_percent, accuracy = 1), \"\\n(\",\n      plays, \")\")),\n    color = \"black\",\n    lineheight = 0.9,\n    size = 4) +\n  scale_fill_gradient(\n    low = \"antiquewhite\",\n    high = \"#46b478\",\n    labels = scales::percent_format(accuracy = 1)) +\n  labs(x = \"Yards to Go\",\n       y = \"Down\",\n       fill = \"Pass %\",\n       title = \"NFL Probability of Passing by Down and Distance (2025)\",\n       subtitle = \"For Goal to Go situations\") +\n       \n  theme_minimal(base_size = 11) +\n  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),\n        panel.grid = element_blank())\n\n# check\n# rate_all.gtg.plot\n\n\n\n\nCode\npats.gtg &lt;- pbp |&gt; \n  filter(\n    down %in% 1:3,\n    posteam == \"NE\", # pats only\n\n    pass_attempt %in% c(0,1) | rush_attempt %in% c(0,1),\n    goal_to_go==1\n  ) |&gt; \n  group_by(down, to_go_f) |&gt; \n  summarise(\n    pass_percent = mean(pass_attempt, na.rm = TRUE),\n    pass_att = sum(pass_attempt, na.rm = TRUE),\n    plays = n(),\n    .groups = \"drop\"\n  )\n\npats.gtg.plot &lt;- ggplot(pats.gtg, aes(x = to_go_f, y = factor(down), fill = pass_percent)) +\n  geom_tile(color = \"white\") +\n  geom_text(\n    aes(label = paste0(\n      scales::percent(pass_percent, accuracy = 1), \"\\n(\",\n      plays, \")\")),\n    color = \"black\",\n    lineheight = 0.9,\n    size = 4) +\n  scale_fill_gradient(\n    low = \"#0c8dc6\",\n    high = \"#C60C30\",\n    labels = scales::percent_format(accuracy = 1)) +\n  labs(x = \"Yards to Go\",\n       y = \"Down\",\n       fill = \"Pass %\",\n       title = \"New England Patriots - Probability of Passing by Down and Distance (2025)\",\n       subtitle = \"For Goal to Go situations\") +\n       \n  theme_minimal(base_size = 11) +\n  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),\n        panel.grid = element_blank())\n\n# check\n# pats.gtg.plot\n\n\n\n\nCode\nrams.gtg &lt;- pbp |&gt; \n  filter(\n    down %in% 1:3,\n    posteam == \"LA\", # rams only\n\n    pass_attempt %in% c(0,1) | rush_attempt %in% c(0,1),\n    goal_to_go==1\n  ) |&gt; \n  group_by(down, to_go_f) |&gt; \n  summarise(\n    pass_percent = mean(pass_attempt, na.rm = TRUE),\n    pass_att = sum(pass_attempt, na.rm = TRUE),\n    plays = n(),\n    .groups = \"drop\"\n  )\n\nrams.gtg.plot &lt;- ggplot(rams.gtg, aes(x = to_go_f, y = factor(down), fill = pass_percent)) +\n  geom_tile(color = \"white\") +\n  geom_text(\n    aes(label = paste0(\n      scales::percent(pass_percent, accuracy = 1), \"\\n(\",\n      plays, \")\"),),\n    color = \"black\",\n    lineheight = 0.9,\n    size = 4) +\n  scale_fill_gradient(\n    low = \"#00aeff\",\n    high = \"#FFD100\",\n    labels = scales::percent_format(accuracy = 1)) +\n  labs(x = \"Yards to Go\",\n       y = \"Down\",\n       fill = \"Pass %\",\n       title = \"Los Angeles Rams - Probability of Passing by Down and Distance (2025)\",\n       subtitle = \"For Goal to Go situations\") +\n       \n  theme_minimal(base_size = 11) +\n  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),\n        panel.grid = element_blank())\n\n# check\n# rams.gtg.plot\n\n\n\n\nCode\nrate_all.gtg.plot / pats.gtg.plot\n\n\n\n\n\n\n\n\n\nFor Goal to go situations: On 1st down & 7-9 yards to go, the Patriots are more likely to run the ball (18% pass rate vs NFL’s 29%)\nOn 2nd & 2-3 yards to go, the Patriots are more likely to pass the ball (60% pass rate vs NFL’s 41%)\nOn 3rd down & 2-3 yards to go, the Patriots are more likely to pass the ball (100% pass rate vs NFL’s 53%)\n\n\nCode\nrate_all.gtg.plot / rams.gtg.plot\n\n\n\n\n\n\n\n\n\nFor Goal to go situations:\nOn 2nd down & 1 yard to go, the LA Rams are more likely to pass the ball (71% pass rate vs NFL’s 19%)\nOn 2nd & 3rd down with 7 to 14 yards to go, the LA Rams have passed the ball. However, these are all single attempts only for goal to go situations. As the previous analysis has shown that LA Rams are a pass oriented team and therefore they will have the tendency to pass rather than run the ball on 2nd and 3rd down with more than 7 yards to go\n\n\nCode\nfourthAndGoal &lt;- pbp |&gt; \n  filter(\n    down == 4,\n    goal_to_go==1,\n     posteam %in% c(\"NE\", \"LA\") \n  ) |&gt; \n  \n  mutate( go.for.it = if_else(\n    fourth_down_converted == 1 | fourth_down_failed == 1,\n    1,0\n  )\n    ) |&gt; \n  group_by(posteam) |&gt;\n  summarise(\n    go.for.it.rate = mean(go.for.it, na.rm = TRUE),\n    .groups = \"drop\"\n  ) \n\nfourthAndGoal |&gt; \n  flextable() |&gt; \n  set_header_labels(\n    posteam = \"Team\",\n    go.for.it.rate = \"Go For it Rate\"\n  ) |&gt;\n  autofit()\n\n\nTeamGo For it RateLA0.3636364NE0.2500000\n\n\nBased on the table above, the LA Rams seem to go for it slightly more than the Patriots given their tendency on being a more pass oriented team"
+  },
+  {
+    "objectID": "projects/posts/ai-discourse/index.html",
+    "href": "projects/posts/ai-discourse/index.html",
+    "title": "AI Discourse on Social Media",
+    "section": "",
+    "text": "Analysis of AI-related discourse across subreddits"
+  },
+  {
+    "objectID": "projects/posts/ai-discourse/index.html#overview",
+    "href": "projects/posts/ai-discourse/index.html#overview",
+    "title": "AI Discourse on Social Media",
+    "section": "",
+    "text": "Analysis of AI-related discourse across subreddits"
+  },
+  {
+    "objectID": "projects/posts/ai-discourse/index.html#interactive-experience",
+    "href": "projects/posts/ai-discourse/index.html#interactive-experience",
+    "title": "AI Discourse on Social Media",
+    "section": "Interactive Experience",
+    "text": "Interactive Experience"
+  },
+  {
+    "objectID": "projects/posts/ai-discourse/index.html#tools-packages-used",
+    "href": "projects/posts/ai-discourse/index.html#tools-packages-used",
+    "title": "AI Discourse on Social Media",
+    "section": "Tools / Packages Used",
+    "text": "Tools / Packages Used\n\nQuarto\nR\nGenially\nOllama\nDeepseek LLM\nQuanteda\nInfranodus\nigraph\nvisNetwork\nNano Banana\nEllmer"
+  },
+  {
+    "objectID": "projects/posts/soccer-player-report/index.html",
+    "href": "projects/posts/soccer-player-report/index.html",
+    "title": "FIFA 2022 Soccer Player Analysis",
+    "section": "",
+    "text": "This data driven report shows how Antoine Griezmann was the single most productive chance creator among the 44 players in his role at the tournament"
+  },
+  {
+    "objectID": "projects/posts/soccer-player-report/index.html#overview",
+    "href": "projects/posts/soccer-player-report/index.html#overview",
+    "title": "FIFA 2022 Soccer Player Analysis",
+    "section": "",
+    "text": "This data driven report shows how Antoine Griezmann was the single most productive chance creator among the 44 players in his role at the tournament"
+  },
+  {
+    "objectID": "projects/posts/soccer-player-report/index.html#full-report",
+    "href": "projects/posts/soccer-player-report/index.html#full-report",
+    "title": "FIFA 2022 Soccer Player Analysis",
+    "section": "Full Report",
+    "text": "Full Report"
   },
   {
     "objectID": "projects/posts/ai-perception/index.html",
